@@ -1,0 +1,486 @@
+effects:
+  passive-refresh-ticks: 100
+
+upgrades:
+  sword:
+    vampirism:
+      icon: RED_DYE
+      name: "&cВампиризм"
+      price: 40000
+      description:
+        - "&7Шанс восстановить часть"
+        - "&7здоровья при ударе по врагу."
+      effect:
+        type: LIFESTEAL
+        chance: 0.25
+        amount: 2.0
+    sharpened_edge:
+      icon: FLINT
+      name: "&fЗаточенная грань"
+      price: 25000
+      description:
+        - "&7Постоянно увеличивает"
+        - "&7урон меча."
+      effect:
+        type: DAMAGE_BONUS
+        amount: 1.5
+    flaming_blade:
+      icon: BLAZE_POWDER
+      name: "&6Пламенное лезвие"
+      price: 32000
+      description:
+        - "&7Шанс поджечь цель"
+        - "&7при ударе."
+      effect:
+        type: FIRE
+        chance: 0.30
+        fire-ticks: 60
+    poison_cut:
+      icon: FERMENTED_SPIDER_EYE
+      name: "&2Ядовитый порез"
+      price: 33000
+      description:
+        - "&7Шанс отравить цель"
+        - "&7после удара."
+      effect:
+        type: TARGET_POTION
+        chance: 0.25
+        potion: POISON
+        duration-ticks: 60
+        amplifier: 0
+    crushing_strike:
+      icon: ANVIL
+      name: "&8Сокрушающий удар"
+      price: 47000
+      description:
+        - "&7Редкий, но мощный"
+        - "&7дополнительный урон."
+      effect:
+        type: DAMAGE_BONUS
+        chance: 0.20
+        amount: 4.0
+    duelist:
+      icon: IRON_NUGGET
+      name: "&7Мастер дуэлей"
+      price: 28000
+      description:
+        - "&7Даёт небольшой постоянный"
+        - "&7бонус к урону."
+      effect:
+        type: DAMAGE_BONUS
+        amount: 0.75
+    executioner:
+      icon: BONE
+      name: "&fПалач"
+      price: 36000
+      description:
+        - "&7Шанс нанести ещё больше"
+        - "&7урона по цели."
+      effect:
+        type: DAMAGE_BONUS
+        chance: 0.35
+        amount: 2.5
+    blood_rush:
+      icon: NETHER_WART
+      name: "&4Кровавый порыв"
+      price: 50000
+      description:
+        - "&7Редкое сильное лечение"
+        - "&7при успешном ударе."
+      effect:
+        type: LIFESTEAL
+        chance: 0.15
+        amount: 4.0
+
+  helmet:
+    night_eye:
+      icon: ENDER_EYE
+      name: "&bНочной глаз"
+      price: 18000
+      description:
+        - "&7Даёт постоянное"
+        - "&7ночное зрение."
+      effect:
+        type: PASSIVE_POTION
+        potion: NIGHT_VISION
+        duration-ticks: 220
+        amplifier: 0
+    aqua_mind:
+      icon: HEART_OF_THE_SEA
+      name: "&3Аква-разум"
+      price: 22000
+      description:
+        - "&7Позволяет дольше"
+        - "&7находиться под водой."
+      effect:
+        type: PASSIVE_POTION
+        potion: WATER_BREATHING
+        duration-ticks: 220
+        amplifier: 0
+    magic_guard:
+      icon: LAPIS_LAZULI
+      name: "&9Магический щит"
+      price: 34000
+      description:
+        - "&7Снижает урон от магии"
+        - "&7и иссушения."
+      effect:
+        type: DAMAGE_REDUCTION
+        amount: 0.10
+        causes:
+          - MAGIC
+          - POISON
+          - WITHER
+    blast_focus:
+      icon: TNT
+      name: "&6Взрывная концентрация"
+      price: 26000
+      description:
+        - "&7Снижает урон от"
+        - "&7взрывов."
+      effect:
+        type: DAMAGE_REDUCTION
+        amount: 0.12
+        causes:
+          - ENTITY_EXPLOSION
+          - BLOCK_EXPLOSION
+    steady_head:
+      icon: SHIELD
+      name: "&7Твёрдая голова"
+      price: 30000
+      description:
+        - "&7Есть шанс полностью"
+        - "&7игнорировать снаряд."
+      effect:
+        type: CANCEL_CHANCE
+        chance: 0.10
+        causes:
+          - PROJECTILE
+    blaze_sight:
+      icon: MAGMA_CREAM
+      name: "&6Взор пламени"
+      price: 25000
+      description:
+        - "&7Даёт постоянную"
+        - "&7защиту от огня."
+      effect:
+        type: PASSIVE_POTION
+        potion: FIRE_RESISTANCE
+        duration-ticks: 220
+        amplifier: 0
+    healing_mask:
+      icon: GHAST_TEAR
+      name: "&dМаска лечения"
+      price: 42000
+      description:
+        - "&7Постепенно восстанавливает"
+        - "&7здоровье."
+      effect:
+        type: PASSIVE_POTION
+        potion: REGENERATION
+        duration-ticks: 120
+        amplifier: 0
+    arrow_reader:
+      icon: SPECTRAL_ARROW
+      name: "&eЧтение траектории"
+      price: 33000
+      description:
+        - "&7Снижает урон"
+        - "&7от снарядов."
+      effect:
+        type: DAMAGE_REDUCTION
+        amount: 0.08
+        causes:
+          - PROJECTILE
+
+  chestplate:
+    guardian_plate:
+      icon: IRON_CHESTPLATE
+      name: "&fПластина хранителя"
+      price: 30000
+      description:
+        - "&7Постоянно уменьшает"
+        - "&7входящий урон."
+      effect:
+        type: DAMAGE_REDUCTION
+        amount: 0.12
+    thorn_mail:
+      icon: SWEET_BERRIES
+      name: "&cШипастая кольчуга"
+      price: 32000
+      description:
+        - "&7Шанс вернуть часть"
+        - "&7урона нападающему."
+      effect:
+        type: THORNS
+        chance: 0.25
+        amount: 2.0
+    ember_core:
+      icon: BLAZE_ROD
+      name: "&6Огненное ядро"
+      price: 24000
+      description:
+        - "&7Даёт защиту от огня"
+        - "&7пока броня надета."
+      effect:
+        type: PASSIVE_POTION
+        potion: FIRE_RESISTANCE
+        duration-ticks: 220
+        amplifier: 0
+    blast_shell:
+      icon: FIRE_CHARGE
+      name: "&6Противовзрывный корпус"
+      price: 35000
+      description:
+        - "&7Снижает урон от"
+        - "&7взрывов."
+      effect:
+        type: DAMAGE_REDUCTION
+        amount: 0.15
+        causes:
+          - ENTITY_EXPLOSION
+          - BLOCK_EXPLOSION
+    last_stand:
+      icon: TOTEM_OF_UNDYING
+      name: "&eПоследний рубеж"
+      price: 55000
+      description:
+        - "&7Иногда полностью"
+        - "&7блокирует удар."
+      effect:
+        type: CANCEL_CHANCE
+        chance: 0.08
+    sturdy_frame:
+      icon: NETHERITE_SCRAP
+      name: "&8Жёсткий каркас"
+      price: 37000
+      description:
+        - "&7Лучше держит"
+        - "&7ближний урон."
+      effect:
+        type: DAMAGE_REDUCTION
+        amount: 0.10
+        causes:
+          - ENTITY_ATTACK
+          - ENTITY_SWEEP_ATTACK
+    resistance_core:
+      icon: PRISMARINE_CRYSTALS
+      name: "&bЯдро стойкости"
+      price: 48000
+      description:
+        - "&7Даёт эффект"
+        - "&7сопротивления урону."
+      effect:
+        type: PASSIVE_POTION
+        potion: DAMAGE_RESISTANCE
+        duration-ticks: 120
+        amplifier: 0
+    recovery_frame:
+      icon: GOLDEN_APPLE
+      name: "&6Регенеративный каркас"
+      price: 41000
+      description:
+        - "&7Помогает медленно"
+        - "&7восстанавливать здоровье."
+      effect:
+        type: PASSIVE_POTION
+        potion: REGENERATION
+        duration-ticks: 120
+        amplifier: 0
+
+  leggings:
+    runner:
+      icon: SUGAR
+      name: "&fБегун"
+      price: 18000
+      description:
+        - "&7Даёт постоянную"
+        - "&7скорость."
+      effect:
+        type: PASSIVE_POTION
+        potion: SPEED
+        duration-ticks: 220
+        amplifier: 0
+    acrobat:
+      icon: RABBIT_FOOT
+      name: "&aАкробат"
+      price: 22000
+      description:
+        - "&7Повышает прыжок"
+        - "&7пока поножи надеты."
+      effect:
+        type: PASSIVE_POTION
+        potion: JUMP
+        duration-ticks: 220
+        amplifier: 0
+    balance:
+      icon: FEATHER
+      name: "&eБаланс"
+      price: 26000
+      description:
+        - "&7Снижает урон"
+        - "&7от падения."
+      effect:
+        type: DAMAGE_REDUCTION
+        amount: 0.20
+        causes:
+          - FALL
+    dodge:
+      icon: PHANTOM_MEMBRANE
+      name: "&bУклонение"
+      price: 39000
+      description:
+        - "&7Есть шанс увернуться"
+        - "&7от части ударов."
+      effect:
+        type: CANCEL_CHANCE
+        chance: 0.12
+        causes:
+          - ENTITY_ATTACK
+          - PROJECTILE
+    sprint_guard:
+      icon: DIAMOND
+      name: "&bСпринтер"
+      price: 42000
+      description:
+        - "&7Даёт более сильный"
+        - "&7эффект скорости."
+      effect:
+        type: PASSIVE_POTION
+        potion: SPEED
+        duration-ticks: 220
+        amplifier: 1
+    adaptive_weave:
+      icon: SLIME_BALL
+      name: "&aАдаптивное плетение"
+      price: 24000
+      description:
+        - "&7Снижает урон от"
+        - "&7опасных поверхностей."
+      effect:
+        type: DAMAGE_REDUCTION
+        amount: 0.10
+        causes:
+          - CONTACT
+          - HOT_FLOOR
+    wind_step:
+      icon: WHITE_WOOL
+      name: "&fШаг ветра"
+      price: 28000
+      description:
+        - "&7Делает падения"
+        - "&7намного мягче."
+      effect:
+        type: PASSIVE_POTION
+        potion: SLOW_FALLING
+        duration-ticks: 120
+        amplifier: 0
+    endurance:
+      icon: TURTLE_SCUTE
+      name: "&2Выносливость"
+      price: 35000
+      description:
+        - "&7Даёт дополнительную"
+        - "&7стойкость к урону."
+      effect:
+        type: PASSIVE_POTION
+        potion: DAMAGE_RESISTANCE
+        duration-ticks: 120
+        amplifier: 0
+
+  boots:
+    feather_step:
+      icon: FEATHER
+      name: "&fПероход"
+      price: 18000
+      description:
+        - "&7Сильно снижает"
+        - "&7урон от падения."
+      effect:
+        type: DAMAGE_REDUCTION
+        amount: 0.40
+        causes:
+          - FALL
+    rabbit_hop:
+      icon: RABBIT_HIDE
+      name: "&eКроличий прыжок"
+      price: 21000
+      description:
+        - "&7Даёт бонус"
+        - "&7к высоте прыжка."
+      effect:
+        type: PASSIVE_POTION
+        potion: JUMP
+        duration-ticks: 220
+        amplifier: 1
+    swift_boots:
+      icon: LEATHER_BOOTS
+      name: "&bБыстрые ботинки"
+      price: 25000
+      description:
+        - "&7Даёт постоянную"
+        - "&7скорость."
+      effect:
+        type: PASSIVE_POTION
+        potion: SPEED
+        duration-ticks: 220
+        amplifier: 1
+    lava_stride:
+      icon: MAGMA_BLOCK
+      name: "&6Лавовый шаг"
+      price: 30000
+      description:
+        - "&7Даёт защиту"
+        - "&7от огня."
+      effect:
+        type: PASSIVE_POTION
+        potion: FIRE_RESISTANCE
+        duration-ticks: 220
+        amplifier: 0
+    anti_projectile:
+      icon: ARROW
+      name: "&7Стабильная стойка"
+      price: 27000
+      description:
+        - "&7Немного снижает урон"
+        - "&7от снарядов."
+      effect:
+        type: DAMAGE_REDUCTION
+        amount: 0.08
+        causes:
+          - PROJECTILE
+    bounce:
+      icon: SLIME_BLOCK
+      name: "&aОтскок"
+      price: 36000
+      description:
+        - "&7Есть шанс полностью"
+        - "&7игнорировать падение."
+      effect:
+        type: CANCEL_CHANCE
+        chance: 0.18
+        causes:
+          - FALL
+    traveler:
+      icon: COMPASS
+      name: "&fСтранник"
+      price: 26000
+      description:
+        - "&7Даёт плавное падение"
+        - "&7во время путешествий."
+      effect:
+        type: PASSIVE_POTION
+        potion: SLOW_FALLING
+        duration-ticks: 120
+        amplifier: 0
+    spike_kick:
+      icon: IRON_BOOTS
+      name: "&cШипованный удар"
+      price: 34000
+      description:
+        - "&7Шанс вернуть урон"
+        - "&7атакующему."
+      effect:
+        type: THORNS
+        chance: 0.15
+        amount: 1.0

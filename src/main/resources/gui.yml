@@ -1,0 +1,67 @@
+menu:
+  main-title: "&8Кузнец"
+  upgrade-title: "&8Улучшения: %type%"
+  main-slots:
+    main-hand: 20
+    helmet: 21
+    chestplate: 22
+    leggings: 23
+    boots: 24
+  upgrade-slots:
+    - 20
+    - 21
+    - 22
+    - 23
+    - 24
+    - 30
+    - 31
+    - 32
+  placeholder:
+    material: BARRIER
+    name: "&cНет предмета"
+    lore:
+      - "&7Поместите подходящий предмет"
+      - "&7или наденьте часть брони."
+  filler:
+    main:
+      items:
+        deco_1:
+          material: BLACK_STAINED_GLASS_PANE
+          slots: "0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 18, 26, 27, 35, 36, 44, 45, 46, 47, 48, 50, 51, 52, 53"
+          display_name: "none"
+        deco_2:
+          material: GRAY_STAINED_GLASS_PANE
+          slots: "10, 11, 12, 13, 14, 15, 16, 19, 25, 28, 29, 33, 34, 37, 38, 39, 40, 41, 42, 43"
+          display_name: "none"
+    upgrade:
+      items:
+        deco_1:
+          material: BLACK_STAINED_GLASS_PANE
+          slots: "0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 18, 26, 27, 35, 36, 44, 45, 46, 47, 48, 50, 51, 52, 53"
+          display_name: "none"
+        deco_2:
+          material: GRAY_STAINED_GLASS_PANE
+          slots: "10, 11, 12, 13, 14, 15, 16, 19, 25, 28, 29, 33, 34, 37, 38, 39, 40, 41, 42, 43"
+          display_name: "none"
+  back-button:
+    slot: 49
+    material: ARROW
+    name: "&eНазад"
+    lore:
+      - "&7Вернуться в главное меню."
+  preview-lore:
+    supported:
+      - "&eНажмите, чтобы открыть улучшения."
+    unsupported:
+      - "&cДля этого предмета улучшений нет."
+  upgrade-status:
+    purchased:
+      - "&aУже куплено"
+      - "&7Это улучшение уже на предмете."
+    available:
+      - "&7Цена: &6%price% монет"
+      - "&eНажмите для покупки"
+
+item-lore:
+  empty-line-before-upgrades: true
+  upgrade-format: "&a+ %upgrade%"

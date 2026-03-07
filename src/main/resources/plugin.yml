@@ -1,0 +1,16 @@
+name: Kuznec
+version: 1.0.0
+main: dev.mark.kuznec.KuznecPlugin
+api-version: "1.16"
+author: Mark
+softdepend:
+  - Vault
+commands:
+  kuznec:
+    description: Открывает меню кузнеца
+    usage: /kuznec
+    permission: kuznec.use
+permissions:
+  kuznec.use:
+    description: Доступ к меню кузнеца
+    default: true

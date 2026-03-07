@@ -1,0 +1,16 @@
+messages:
+  no-economy: "&cVault или экономика не найдены."
+  unsupported-item: "&cДля этого предмета нет доступных улучшений."
+  not-enough-money: "&cНедостаточно монет. Нужно: &6%price%"
+  already-purchased: "&eЭто улучшение уже куплено."
+  no-item: "&cПредмет больше не найден."
+  generic-error: "&cНе удалось обработать действие."
+  purchase-success: "&aУлучшение %upgrade% куплено за &6%price% монет&a."
+
+sounds:
+  success: ENTITY_PLAYER_LEVELUP
+  success-volume: 1.0
+  success-pitch: 1.1
+  error: ENTITY_VILLAGER_NO
+  error-volume: 1.0
+  error-pitch: 1.0
