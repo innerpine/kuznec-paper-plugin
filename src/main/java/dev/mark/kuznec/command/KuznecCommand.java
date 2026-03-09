@@ -41,8 +41,12 @@ public final class KuznecCommand implements CommandExecutor {
             return true;
         }
 
-        plugin.reloadPluginState();
-        sender.sendMessage(configManager.getMessage("reload-success"));
+        try {
+            plugin.reloadPluginState();
+            sender.sendMessage(configManager.getMessage("reload-success"));
+        } catch (RuntimeException exception) {
+            sender.sendMessage(configManager.getMessage("reload-failed", "%reason%", exception.getMessage()));
+        }
         return true;
     }
 }

@@ -48,13 +48,32 @@ public final class ConfigManager {
         messagesFile.reload();
         effectsFile.reload();
 
-        this.guiConfig = guiFile.getConfiguration();
-        this.messagesConfig = messagesFile.getConfiguration();
-        this.effectsConfig = effectsFile.getConfiguration();
+        FileConfiguration loadedGuiConfig = guiFile.getConfiguration();
+        FileConfiguration loadedMessagesConfig = messagesFile.getConfiguration();
+        FileConfiguration loadedEffectsConfig = effectsFile.getConfiguration();
+        Map<MenuSlotType, Integer> loadedMainMenuSlots = loadMainMenuSlots(loadedGuiConfig);
+        List<Integer> loadedUpgradeSlots = loadUpgradeSlots(loadedGuiConfig);
+        Map<FillerMenuType, List<FillerItemConfig>> loadedFillerItemsByMenu = loadAllFillerItems(loadedGuiConfig);
 
-        this.mainMenuSlots = loadMainMenuSlots();
-        this.upgradeSlots = loadUpgradeSlots();
-        this.fillerItemsByMenu = loadAllFillerItems();
+        ConfigValidationResult validationResult = ConfigValidator.validate(
+                loadedGuiConfig,
+                loadedMessagesConfig,
+                loadedEffectsConfig,
+                loadedMainMenuSlots,
+                loadedUpgradeSlots,
+                loadedFillerItemsByMenu
+        );
+        logValidationWarnings(validationResult);
+        if (!validationResult.isValid()) {
+            throw new ConfigValidationException(validationResult);
+        }
+
+        this.guiConfig = loadedGuiConfig;
+        this.messagesConfig = loadedMessagesConfig;
+        this.effectsConfig = loadedEffectsConfig;
+        this.mainMenuSlots = loadedMainMenuSlots;
+        this.upgradeSlots = loadedUpgradeSlots;
+        this.fillerItemsByMenu = loadedFillerItemsByMenu;
     }
 
     public ConfigurationSection getUpgradesSection() {
@@ -192,31 +211,31 @@ public final class ConfigManager {
         return effectsConfig.getLong("effects.passive-refresh-ticks", 100L);
     }
 
-    private Map<MenuSlotType, Integer> loadMainMenuSlots() {
+    private Map<MenuSlotType, Integer> loadMainMenuSlots(FileConfiguration loadedGuiConfig) {
         Map<MenuSlotType, Integer> slots = new EnumMap<MenuSlotType, Integer>(MenuSlotType.class);
-        slots.put(MenuSlotType.MAIN_HAND, guiConfig.getInt("menu.main-slots.main-hand", 20));
-        slots.put(MenuSlotType.HELMET, guiConfig.getInt("menu.main-slots.helmet", 21));
-        slots.put(MenuSlotType.CHESTPLATE, guiConfig.getInt("menu.main-slots.chestplate", 22));
-        slots.put(MenuSlotType.LEGGINGS, guiConfig.getInt("menu.main-slots.leggings", 23));
-        slots.put(MenuSlotType.BOOTS, guiConfig.getInt("menu.main-slots.boots", 24));
+        slots.put(MenuSlotType.MAIN_HAND, loadedGuiConfig.getInt("menu.main-slots.main-hand", 20));
+        slots.put(MenuSlotType.HELMET, loadedGuiConfig.getInt("menu.main-slots.helmet", 21));
+        slots.put(MenuSlotType.CHESTPLATE, loadedGuiConfig.getInt("menu.main-slots.chestplate", 22));
+        slots.put(MenuSlotType.LEGGINGS, loadedGuiConfig.getInt("menu.main-slots.leggings", 23));
+        slots.put(MenuSlotType.BOOTS, loadedGuiConfig.getInt("menu.main-slots.boots", 24));
         return slots;
     }
 
-    private List<Integer> loadUpgradeSlots() {
-        List<Integer> slots = new ArrayList<Integer>(guiConfig.getIntegerList("menu.upgrade-slots"));
+    private List<Integer> loadUpgradeSlots(FileConfiguration loadedGuiConfig) {
+        List<Integer> slots = new ArrayList<Integer>(loadedGuiConfig.getIntegerList("menu.upgrade-slots"));
         if (slots.isEmpty()) {
             return Arrays.asList(20, 21, 22, 23, 24, 30, 31, 32);
         }
         return slots;
     }
 
-    private Map<FillerMenuType, List<FillerItemConfig>> loadAllFillerItems() {
+    private Map<FillerMenuType, List<FillerItemConfig>> loadAllFillerItems(FileConfiguration loadedGuiConfig) {
         Map<FillerMenuType, List<FillerItemConfig>> itemsByMenu = new EnumMap<FillerMenuType, List<FillerItemConfig>>(FillerMenuType.class);
-        List<FillerItemConfig> sharedItems = loadFillerItemsFromPath("menu.filler.items");
-        List<FillerItemConfig> legacyItems = sharedItems.isEmpty() ? loadLegacyFillerItems() : Collections.<FillerItemConfig>emptyList();
+        List<FillerItemConfig> sharedItems = loadFillerItemsFromPath(loadedGuiConfig, "menu.filler.items");
+        List<FillerItemConfig> legacyItems = sharedItems.isEmpty() ? loadLegacyFillerItems(loadedGuiConfig) : Collections.<FillerItemConfig>emptyList();
 
         for (FillerMenuType menuType : FillerMenuType.values()) {
-            List<FillerItemConfig> specificItems = loadFillerItemsFromPath("menu.filler." + menuType.getConfigKey() + ".items");
+            List<FillerItemConfig> specificItems = loadFillerItemsFromPath(loadedGuiConfig, "menu.filler." + menuType.getConfigKey() + ".items");
             if (!specificItems.isEmpty()) {
                 itemsByMenu.put(menuType, specificItems);
                 continue;
@@ -233,8 +252,8 @@ public final class ConfigManager {
         return itemsByMenu;
     }
 
-    private List<FillerItemConfig> loadFillerItemsFromPath(String path) {
-        ConfigurationSection itemsSection = guiConfig.getConfigurationSection(path);
+    private List<FillerItemConfig> loadFillerItemsFromPath(FileConfiguration loadedGuiConfig, String path) {
+        ConfigurationSection itemsSection = loadedGuiConfig.getConfigurationSection(path);
         if (itemsSection == null) {
             return Collections.emptyList();
         }
@@ -260,8 +279,8 @@ public final class ConfigManager {
         return items;
     }
 
-    private List<FillerItemConfig> loadLegacyFillerItems() {
-        if (!guiConfig.getBoolean("menu.filler.enabled", true)) {
+    private List<FillerItemConfig> loadLegacyFillerItems(FileConfiguration loadedGuiConfig) {
+        if (!loadedGuiConfig.getBoolean("menu.filler.enabled", true)) {
             return Collections.emptyList();
         }
 
@@ -270,13 +289,19 @@ public final class ConfigManager {
             allSlots.add(slot);
         }
 
-        ItemStack itemStack = new ItemBuilder(parseMaterial(guiConfig.getString("menu.filler.material"), Material.BLACK_STAINED_GLASS_PANE))
-                .name(guiConfig.getString("menu.filler.name", " "))
-                .lore(guiConfig.getStringList("menu.filler.lore"))
+        ItemStack itemStack = new ItemBuilder(parseMaterial(loadedGuiConfig.getString("menu.filler.material"), Material.BLACK_STAINED_GLASS_PANE))
+                .name(loadedGuiConfig.getString("menu.filler.name", " "))
+                .lore(loadedGuiConfig.getStringList("menu.filler.lore"))
                 .flags(ItemFlag.values())
                 .build();
 
         return Collections.singletonList(new FillerItemConfig(itemStack, allSlots));
+    }
+
+    private void logValidationWarnings(ConfigValidationResult validationResult) {
+        for (String warning : validationResult.getWarnings()) {
+            plugin.getLogger().warning(warning);
+        }
     }
 
     private List<Integer> parseSlots(Object rawSlots) {

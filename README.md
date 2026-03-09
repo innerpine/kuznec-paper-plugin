@@ -47,6 +47,7 @@ target/kuznec-1.0.0.jar
 ## Commands
 
 - `/kuznec` - opens the blacksmith menu
+- `/kuznec reload` - reloads plugin configs
 
 ## Configuration
 
@@ -55,6 +56,8 @@ The plugin uses three separate config files:
 - `gui.yml` - menu titles, slots, filler items, button items, lore formatting
 - `messages.yml` - player messages and sounds
 - `effects.yml` - passive refresh timing and all upgrade definitions
+
+The plugin validates configs before applying them. If a reload contains invalid values, the old runtime state stays active and the command reports the validation error.
 
 ## Project Structure
 
@@ -74,3 +77,4 @@ src/main/java/dev/mark/kuznec
 - The plugin prevents taking decorative GUI items out of menus.
 - Unsupported items in the hand are shown in the menu, but they do not open an upgrade menu.
 - The plugin is configured for Russian in-game text out of the box.
+- CI runs `mvn verify` on every push and pull request.
