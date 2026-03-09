@@ -11,36 +11,57 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitTask;
 
 public final class KuznecPlugin extends JavaPlugin {
 
+    private ConfigManager configManager;
+    private VaultHook vaultHook;
+    private UpgradeManager upgradeManager;
+    private GuiManager guiManager;
+    private BukkitTask passiveEffectTask;
+
     @Override
     public void onEnable() {
-        ConfigManager configManager = new ConfigManager(this);
+        this.configManager = new ConfigManager(this);
         configManager.reload();
 
-        VaultHook vaultHook = new VaultHook(this);
+        this.vaultHook = new VaultHook(this);
         if (!vaultHook.setup()) {
             getLogger().severe("Vault или поставщик экономики не найдены. Плагин отключен.");
             Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
 
-        UpgradeManager upgradeManager = new UpgradeManager(this, configManager);
+        this.upgradeManager = new UpgradeManager(this, configManager);
         upgradeManager.load();
 
-        GuiManager guiManager = new GuiManager(configManager, upgradeManager);
+        this.guiManager = new GuiManager(configManager, upgradeManager);
 
         PluginCommand pluginCommand = getCommand("kuznec");
         if (pluginCommand == null) {
             throw new IllegalStateException("Команда /kuznec не объявлена в plugin.yml");
         }
-        pluginCommand.setExecutor(new KuznecCommand(guiManager));
+        pluginCommand.setExecutor(new KuznecCommand(this, configManager, guiManager));
 
         PluginManager pluginManager = getServer().getPluginManager();
         pluginManager.registerEvents(new InventoryListener(guiManager, configManager, upgradeManager, vaultHook), this);
         pluginManager.registerEvents(new UpgradeEffectListener(configManager, upgradeManager), this);
-        getServer().getScheduler().runTaskTimer(
+        startPassiveEffectTask();
+    }
+
+    public void reloadPluginState() {
+        configManager.reload();
+        upgradeManager.load();
+        startPassiveEffectTask();
+    }
+
+    private void startPassiveEffectTask() {
+        if (passiveEffectTask != null) {
+            passiveEffectTask.cancel();
+        }
+
+        passiveEffectTask = getServer().getScheduler().runTaskTimer(
                 this,
                 new UpgradeEffectListener.PassiveEffectTask(configManager, upgradeManager),
                 20L,

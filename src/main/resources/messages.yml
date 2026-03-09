@@ -6,6 +6,9 @@ messages:
   no-item: "&cПредмет больше не найден."
   generic-error: "&cНе удалось обработать действие."
   purchase-success: "&aУлучшение %upgrade% куплено за &6%price% монет&a."
+  reload-success: "&#55FF99Конфигурации кузнеца успешно перезагружены."
+  no-permission: "&cУ вас нет прав на это действие."
+  player-only: "&cКоманда доступна только игрокам."
 
 sounds:
   success: ENTITY_PLAYER_LEVELUP

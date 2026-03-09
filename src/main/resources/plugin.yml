@@ -8,9 +8,12 @@ softdepend:
 commands:
   kuznec:
     description: Открывает меню кузнеца
-    usage: /kuznec
+    usage: /kuznec [reload]
     permission: kuznec.use
 permissions:
   kuznec.use:
     description: Доступ к меню кузнеца
     default: true
+  kuznec.reload:
+    description: Перезагрузка конфигов кузнеца
+    default: op

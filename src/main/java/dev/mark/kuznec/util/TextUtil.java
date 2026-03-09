@@ -7,9 +7,12 @@ import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public final class TextUtil {
 
+    private static final Pattern HEX_COLOR_PATTERN = Pattern.compile("(?i)&?#([0-9A-F]{6})");
     private static final DecimalFormat PRICE_FORMAT;
 
     static {
@@ -25,7 +28,9 @@ public final class TextUtil {
         if (value == null) {
             return "";
         }
-        return ChatColor.translateAlternateColorCodes('&', value);
+
+        String translated = applyHexColors(value);
+        return ChatColor.translateAlternateColorCodes('&', translated);
     }
 
     public static List<String> colorize(List<String> values) {
@@ -48,5 +53,16 @@ public final class TextUtil {
 
     public static String formatPrice(double price) {
         return PRICE_FORMAT.format(price);
+    }
+
+    private static String applyHexColors(String value) {
+        Matcher matcher = HEX_COLOR_PATTERN.matcher(value);
+        StringBuffer buffer = new StringBuffer();
+        while (matcher.find()) {
+            String hex = "#" + matcher.group(1);
+            matcher.appendReplacement(buffer, Matcher.quoteReplacement(net.md_5.bungee.api.ChatColor.of(hex).toString()));
+        }
+        matcher.appendTail(buffer);
+        return buffer.toString();
     }
 }
