@@ -136,6 +136,15 @@ public final class UpgradeManager {
             return PurchaseResult.ALREADY_PURCHASED;
         }
 
+        if (item.getItemMeta() == null) {
+            return PurchaseResult.UNSUPPORTED_ITEM;
+        }
+
+        NamespacedKey key = keysByUpgrade.get(definition.getUniqueKey());
+        if (key == null) {
+            return PurchaseResult.UNSUPPORTED_ITEM;
+        }
+
         if (!economy.has(player, definition.getPrice())) {
             return PurchaseResult.NOT_ENOUGH_MONEY;
         }
@@ -148,11 +157,7 @@ public final class UpgradeManager {
         ItemStack updated = item.clone();
         ItemMeta meta = updated.getItemMeta();
         if (meta == null) {
-            return PurchaseResult.UNSUPPORTED_ITEM;
-        }
-
-        NamespacedKey key = keysByUpgrade.get(definition.getUniqueKey());
-        if (key == null) {
+            economy.depositPlayer(player, definition.getPrice());
             return PurchaseResult.UNSUPPORTED_ITEM;
         }
 
@@ -161,6 +166,14 @@ public final class UpgradeManager {
         applyPurchasedUpgradeLore(updated, type);
         type.setPlayerItem(player, updated);
         player.updateInventory();
+
+        if (configManager.isDebugMode()) {
+            plugin.getLogger().info("[Debug] " + player.getName()
+                    + " купил улучшение \"" + definition.getName()
+                    + "\" (" + definition.getUniqueKey() + ")"
+                    + " за " + definition.getPrice());
+        }
+
         return PurchaseResult.SUCCESS;
     }
 

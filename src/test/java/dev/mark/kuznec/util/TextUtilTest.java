@@ -9,7 +9,8 @@ public final class TextUtilTest {
     @Test
     void colorizeSupportsHexAndLegacyCodes() {
         String value = TextUtil.colorize("&#55FF99Hello &cWorld");
-        String expected = net.md_5.bungee.api.ChatColor.of("#55FF99").toString()
+        // §x§5§5§F§F§9§9 is the legacy §x format for #55FF99
+        String expected = "\u00a7x\u00a75\u00a75\u00a7F\u00a7F\u00a79\u00a79"
                 + "Hello "
                 + org.bukkit.ChatColor.RED
                 + "World";

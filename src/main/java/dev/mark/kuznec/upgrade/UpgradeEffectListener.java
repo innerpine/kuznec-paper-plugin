@@ -19,6 +19,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public final class UpgradeEffectListener implements Listener {
 
@@ -29,9 +31,11 @@ public final class UpgradeEffectListener implements Listener {
             EquipmentType.BOOTS
     };
 
+    private final ConfigManager configManager;
     private final UpgradeManager upgradeManager;
 
     public UpgradeEffectListener(ConfigManager configManager, UpgradeManager upgradeManager) {
+        this.configManager = configManager;
         this.upgradeManager = upgradeManager;
     }
 
@@ -80,6 +84,12 @@ public final class UpgradeEffectListener implements Listener {
                     break;
                 default:
                     break;
+            }
+
+            if (configManager.isDebugMode()) {
+                Bukkit.getLogger().info("[Debug] Эффект " + effect.getType()
+                        + " (" + definition.getUniqueKey() + ")"
+                        + " сработал у " + attacker.getName());
             }
         }
     }
@@ -145,16 +155,24 @@ public final class UpgradeEffectListener implements Listener {
 
         private final ConfigManager configManager;
         private final UpgradeManager upgradeManager;
+        private final Logger logger;
 
-        public PassiveEffectTask(ConfigManager configManager, UpgradeManager upgradeManager) {
+        public PassiveEffectTask(ConfigManager configManager, UpgradeManager upgradeManager, Logger logger) {
             this.configManager = configManager;
             this.upgradeManager = upgradeManager;
+            this.logger = logger;
         }
 
         @Override
         public void run() {
             for (Player player : Bukkit.getOnlinePlayers()) {
-                applyPassiveEffects(player);
+                try {
+                    applyPassiveEffects(player);
+                } catch (Exception exception) {
+                    logger.log(Level.WARNING,
+                            "Ошибка при применении пассивных эффектов к игроку " + player.getName(),
+                            exception);
+                }
             }
         }
 
@@ -190,6 +208,11 @@ public final class UpgradeEffectListener implements Listener {
 
             for (PotionEffect effect : strongestEffects.values()) {
                 player.addPotionEffect(effect, true);
+                if (configManager.isDebugMode()) {
+                    logger.info("[Debug] Пассивный эффект " + effect.getType().getName()
+                            + " (усилитель " + effect.getAmplifier() + ")"
+                            + " применён к " + player.getName());
+                }
             }
         }
     }

@@ -211,6 +211,10 @@ public final class ConfigManager {
         return effectsConfig.getLong("effects.passive-refresh-ticks", 100L);
     }
 
+    public boolean isDebugMode() {
+        return effectsConfig.getBoolean("effects.debug", false);
+    }
+
     private Map<MenuSlotType, Integer> loadMainMenuSlots(FileConfiguration loadedGuiConfig) {
         Map<MenuSlotType, Integer> slots = new EnumMap<MenuSlotType, Integer>(MenuSlotType.class);
         slots.put(MenuSlotType.MAIN_HAND, loadedGuiConfig.getInt("menu.main-slots.main-hand", 20));

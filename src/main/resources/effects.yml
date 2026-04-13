@@ -1,5 +1,7 @@
 effects:
   passive-refresh-ticks: 100
+  # Включить подробное логирование покупок и срабатываний эффектов (для отладки).
+  debug: false
 
 upgrades:
   sword:
