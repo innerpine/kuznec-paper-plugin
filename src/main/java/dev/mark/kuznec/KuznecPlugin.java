@@ -78,7 +78,7 @@ public final class KuznecPlugin extends JavaPlugin {
 
         passiveEffectTask = getServer().getScheduler().runTaskTimer(
                 this,
-                new UpgradeEffectListener.PassiveEffectTask(configManager, upgradeManager),
+                new UpgradeEffectListener.PassiveEffectTask(configManager, upgradeManager, getLogger()),
                 20L,
                 Math.max(20L, configManager.getPassiveRefreshTicks())
         );

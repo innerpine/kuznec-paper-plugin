@@ -59,10 +59,21 @@ public final class TextUtil {
         Matcher matcher = HEX_COLOR_PATTERN.matcher(value);
         StringBuffer buffer = new StringBuffer();
         while (matcher.find()) {
-            String hex = "#" + matcher.group(1);
-            matcher.appendReplacement(buffer, Matcher.quoteReplacement(net.md_5.bungee.api.ChatColor.of(hex).toString()));
+            matcher.appendReplacement(buffer, Matcher.quoteReplacement(hexToLegacyColor(matcher.group(1))));
         }
         matcher.appendTail(buffer);
         return buffer.toString();
+    }
+
+    /**
+     * Converts a 6-character hex color string (without '#') to Minecraft's legacy
+     * §x§R§R§G§G§B§B format understood by all 1.16+ clients.
+     */
+    private static String hexToLegacyColor(String hex) {
+        StringBuilder sb = new StringBuilder("\u00a7x");
+        for (char c : hex.toCharArray()) {
+            sb.append('\u00a7').append(c);
+        }
+        return sb.toString();
     }
 }
