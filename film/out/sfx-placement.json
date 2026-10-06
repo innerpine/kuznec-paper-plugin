@@ -1,0 +1,546 @@
+[
+ {
+  "beat": 1,
+  "sfx": "cinematic-collapse",
+  "event": 0.36,
+  "peak_in_file": 0.1417,
+  "starts": 0.2183,
+  "gain_db": -4
+ },
+ {
+  "beat": 2,
+  "sfx": "glass-expand",
+  "event": 0.56,
+  "peak_in_file": 0.1555,
+  "starts": 0.4045,
+  "gain_db": -2
+ },
+ {
+  "beat": 3,
+  "sfx": "glass-typing",
+  "event": 1.02,
+  "peak_in_file": 0.0041,
+  "starts": 1.0159,
+  "gain_db": -6
+ },
+ {
+  "beat": 3,
+  "sfx": "glass-typing",
+  "event": 1.1,
+  "peak_in_file": 0.0041,
+  "starts": 1.0959,
+  "gain_db": -8
+ },
+ {
+  "beat": 4,
+  "sfx": "mechanical-press",
+  "event": 1.5,
+  "peak_in_file": 0.0016,
+  "starts": 1.4984,
+  "gain_db": 0
+ },
+ {
+  "beat": 4,
+  "sfx": "glass-lock",
+  "event": 1.72,
+  "peak_in_file": 0.0118,
+  "starts": 1.7082,
+  "gain_db": -3
+ },
+ {
+  "beat": 5,
+  "sfx": "glass-unlock",
+  "event": 2.04,
+  "peak_in_file": 0.2607,
+  "starts": 1.7792,
+  "gain_db": 0
+ },
+ {
+  "beat": 6,
+  "sfx": "soft-swipe",
+  "event": 2.56,
+  "peak_in_file": 0.0361,
+  "starts": 2.5239,
+  "gain_db": -3
+ },
+ {
+  "beat": 7,
+  "sfx": "soft-reorder",
+  "event": 3.08,
+  "peak_in_file": 0.0131,
+  "starts": 3.0669,
+  "gain_db": -2
+ },
+ {
+  "beat": 8,
+  "sfx": "soft-reorder",
+  "event": 3.58,
+  "peak_in_file": 0.0131,
+  "starts": 3.5669,
+  "gain_db": -2
+ },
+ {
+  "beat": 9,
+  "sfx": "glass-progress-step",
+  "event": 4.08,
+  "peak_in_file": 0.0058,
+  "starts": 4.0742,
+  "gain_db": -4
+ },
+ {
+  "beat": 10,
+  "sfx": "glass-snap",
+  "event": 4.68,
+  "peak_in_file": 0.0055,
+  "starts": 4.6745,
+  "gain_db": -2
+ },
+ {
+  "beat": 11,
+  "sfx": "glass-hover",
+  "event": 5.22,
+  "peak_in_file": 0.0039,
+  "starts": 5.2161,
+  "gain_db": -6
+ },
+ {
+  "beat": 12,
+  "sfx": "mechanical-press",
+  "event": 5.5,
+  "peak_in_file": 0.0016,
+  "starts": 5.4984,
+  "gain_db": 0
+ },
+ {
+  "beat": 13,
+  "sfx": "cinematic-expand",
+  "event": 6.0,
+  "peak_in_file": 0.1545,
+  "starts": 5.8455,
+  "gain_db": -1
+ },
+ {
+  "beat": 13,
+  "sfx": "glass-typing",
+  "event": 6.12,
+  "peak_in_file": 0.0041,
+  "starts": 6.1159,
+  "gain_db": -8
+ },
+ {
+  "beat": 13,
+  "sfx": "glass-typing",
+  "event": 6.32,
+  "peak_in_file": 0.0041,
+  "starts": 6.3159,
+  "gain_db": -8
+ },
+ {
+  "beat": 13,
+  "sfx": "glass-typing",
+  "event": 6.52,
+  "peak_in_file": 0.0041,
+  "starts": 6.5159,
+  "gain_db": -8
+ },
+ {
+  "beat": 13,
+  "sfx": "glass-typing",
+  "event": 6.72,
+  "peak_in_file": 0.0041,
+  "starts": 6.7159,
+  "gain_db": -8
+ },
+ {
+  "beat": 14,
+  "sfx": "glass-typing",
+  "event": 6.92,
+  "peak_in_file": 0.0041,
+  "starts": 6.9159,
+  "gain_db": -8
+ },
+ {
+  "beat": 15,
+  "sfx": "glass-collapse",
+  "event": 7.04,
+  "peak_in_file": 0.1294,
+  "starts": 6.9106,
+  "gain_db": -2
+ },
+ {
+  "beat": 16,
+  "sfx": "glass-expand",
+  "event": 7.52,
+  "peak_in_file": 0.1555,
+  "starts": 7.3645,
+  "gain_db": -2
+ },
+ {
+  "beat": 17,
+  "sfx": "mechanical-press",
+  "event": 8.0,
+  "peak_in_file": 0.0016,
+  "starts": 7.9984,
+  "gain_db": 0
+ },
+ {
+  "beat": 17,
+  "sfx": "glass-toggle-on",
+  "event": 8.14,
+  "peak_in_file": 0.0837,
+  "starts": 8.0563,
+  "gain_db": -3
+ },
+ {
+  "beat": 18,
+  "sfx": "glass-drag-start",
+  "event": 8.52,
+  "peak_in_file": 0.0147,
+  "starts": 8.5053,
+  "gain_db": -2
+ },
+ {
+  "beat": 18,
+  "sfx": "glass-seek",
+  "event": 8.801,
+  "peak_in_file": 0.1444,
+  "starts": 8.6566,
+  "gain_db": -6
+ },
+ {
+  "beat": 19,
+  "sfx": "glass-seek",
+  "event": 8.983,
+  "peak_in_file": 0.1444,
+  "starts": 8.8386,
+  "gain_db": -6
+ },
+ {
+  "beat": 19,
+  "sfx": "glass-seek",
+  "event": 9.164,
+  "peak_in_file": 0.1444,
+  "starts": 9.0196,
+  "gain_db": -6
+ },
+ {
+  "beat": 19,
+  "sfx": "glass-seek",
+  "event": 9.345,
+  "peak_in_file": 0.1444,
+  "starts": 9.2006,
+  "gain_db": -6
+ },
+ {
+  "beat": 20,
+  "sfx": "glass-seek",
+  "event": 9.527,
+  "peak_in_file": 0.1444,
+  "starts": 9.3826,
+  "gain_db": -6
+ },
+ {
+  "beat": 20,
+  "sfx": "glass-seek",
+  "event": 9.708,
+  "peak_in_file": 0.1444,
+  "starts": 9.5636,
+  "gain_db": -6
+ },
+ {
+  "beat": 20,
+  "sfx": "glass-seek",
+  "event": 9.889,
+  "peak_in_file": 0.1444,
+  "starts": 9.7446,
+  "gain_db": -6
+ },
+ {
+  "beat": 21,
+  "sfx": "glass-snap",
+  "event": 9.99,
+  "peak_in_file": 0.0055,
+  "starts": 9.9845,
+  "gain_db": 0
+ },
+ {
+  "beat": 22,
+  "sfx": "studio-swipe",
+  "event": 10.52,
+  "peak_in_file": 0.0209,
+  "starts": 10.4991,
+  "gain_db": -3
+ },
+ {
+  "beat": 23,
+  "sfx": "glass-open",
+  "event": 11.04,
+  "peak_in_file": 0.007,
+  "starts": 11.033,
+  "gain_db": -2
+ },
+ {
+  "beat": 24,
+  "sfx": "glass-wake",
+  "event": 11.56,
+  "peak_in_file": 0.0138,
+  "starts": 11.5462,
+  "gain_db": -2
+ },
+ {
+  "beat": 25,
+  "sfx": "glass-progress-step",
+  "event": 12.04,
+  "peak_in_file": 0.0058,
+  "starts": 12.0342,
+  "gain_db": -4
+ },
+ {
+  "beat": 26,
+  "sfx": "glass-notification",
+  "event": 12.6,
+  "peak_in_file": 0.236,
+  "starts": 12.364,
+  "gain_db": -1
+ },
+ {
+  "beat": 27,
+  "sfx": "studio-swipe",
+  "event": 13.04,
+  "peak_in_file": 0.0209,
+  "starts": 13.0191,
+  "gain_db": -3
+ },
+ {
+  "beat": 28,
+  "sfx": "glass-drag-start",
+  "event": 13.54,
+  "peak_in_file": 0.0147,
+  "starts": 13.5253,
+  "gain_db": -3
+ },
+ {
+  "beat": 29,
+  "sfx": "glass-send",
+  "event": 14.04,
+  "peak_in_file": 0.0078,
+  "starts": 14.0322,
+  "gain_db": -2
+ },
+ {
+  "beat": 30,
+  "sfx": "cinematic-expand",
+  "event": 14.52,
+  "peak_in_file": 0.1545,
+  "starts": 14.3655,
+  "gain_db": -4
+ },
+ {
+  "beat": 31,
+  "sfx": "cinematic-open",
+  "event": 15.02,
+  "peak_in_file": 0.0084,
+  "starts": 15.0116,
+  "gain_db": -3
+ },
+ {
+  "beat": 32,
+  "sfx": "glass-long-press",
+  "event": 15.52,
+  "peak_in_file": 0.0124,
+  "starts": 15.5076,
+  "gain_db": -2
+ },
+ {
+  "beat": 33,
+  "sfx": "soft-swipe",
+  "event": 16.04,
+  "peak_in_file": 0.0361,
+  "starts": 16.0039,
+  "gain_db": -4
+ },
+ {
+  "beat": 34,
+  "sfx": "glass-drop",
+  "event": 16.48,
+  "peak_in_file": 0.0576,
+  "starts": 16.4224,
+  "gain_db": 0
+ },
+ {
+  "beat": 35,
+  "sfx": "glass-receive",
+  "event": 17.04,
+  "peak_in_file": 0.1386,
+  "starts": 16.9014,
+  "gain_db": -2
+ },
+ {
+  "beat": 36,
+  "sfx": "glass-expand",
+  "event": 17.56,
+  "peak_in_file": 0.1555,
+  "starts": 17.4045,
+  "gain_db": -3
+ },
+ {
+  "beat": 37,
+  "sfx": "mechanical-press",
+  "event": 18.0,
+  "peak_in_file": 0.0016,
+  "starts": 17.9984,
+  "gain_db": 0
+ },
+ {
+  "beat": 38,
+  "sfx": "glass-select",
+  "event": 18.56,
+  "peak_in_file": 0.114,
+  "starts": 18.446,
+  "gain_db": -2
+ },
+ {
+  "beat": 39,
+  "sfx": "mechanical-press",
+  "event": 19.0,
+  "peak_in_file": 0.0016,
+  "starts": 18.9984,
+  "gain_db": -1
+ },
+ {
+  "beat": 39,
+  "sfx": "glass-check",
+  "event": 19.06,
+  "peak_in_file": 0.0078,
+  "starts": 19.0522,
+  "gain_db": -2
+ },
+ {
+  "beat": 40,
+  "sfx": "soft-swipe",
+  "event": 19.56,
+  "peak_in_file": 0.0361,
+  "starts": 19.5239,
+  "gain_db": -4
+ },
+ {
+  "beat": 41,
+  "sfx": "studio-snap",
+  "event": 20.06,
+  "peak_in_file": 0.0047,
+  "starts": 20.0552,
+  "gain_db": -2
+ },
+ {
+  "beat": 42,
+  "sfx": "mechanical-press",
+  "event": 20.5,
+  "peak_in_file": 0.0016,
+  "starts": 20.4984,
+  "gain_db": 0
+ },
+ {
+  "beat": 42,
+  "sfx": "glass-checkout",
+  "event": 20.56,
+  "peak_in_file": 0.4322,
+  "starts": 20.1278,
+  "gain_db": -3
+ },
+ {
+  "beat": 43,
+  "sfx": "glass-purchase",
+  "event": 21.06,
+  "peak_in_file": 0.346,
+  "starts": 20.714,
+  "gain_db": 0
+ },
+ {
+  "beat": 44,
+  "sfx": "glass-progress-step",
+  "event": 21.56,
+  "peak_in_file": 0.0058,
+  "starts": 21.5542,
+  "gain_db": -4
+ },
+ {
+  "beat": 44,
+  "sfx": "glass-progress-step",
+  "event": 21.8,
+  "peak_in_file": 0.0058,
+  "starts": 21.7942,
+  "gain_db": -6
+ },
+ {
+  "beat": 45,
+  "sfx": "glass-send",
+  "event": 22.12,
+  "peak_in_file": 0.0078,
+  "starts": 22.1122,
+  "gain_db": -2
+ },
+ {
+  "beat": 46,
+  "sfx": "arcade-level-up",
+  "event": 22.56,
+  "peak_in_file": 0.4545,
+  "starts": 22.1055,
+  "gain_db": -3
+ },
+ {
+  "beat": 47,
+  "sfx": "cinematic-close",
+  "event": 23.1,
+  "peak_in_file": 0.0901,
+  "starts": 23.0099,
+  "gain_db": -2
+ },
+ {
+  "beat": 49,
+  "sfx": "cinematic-collapse",
+  "event": 24.2,
+  "peak_in_file": 0.1417,
+  "starts": 24.0583,
+  "gain_db": -4
+ },
+ {
+  "beat": 50,
+  "sfx": "glass-unlock",
+  "event": 24.56,
+  "peak_in_file": 0.2607,
+  "starts": 24.2992,
+  "gain_db": -2
+ },
+ {
+  "beat": 51,
+  "sfx": "glass-lock",
+  "event": 25.12,
+  "peak_in_file": 0.0118,
+  "starts": 25.1082,
+  "gain_db": -3
+ },
+ {
+  "beat": 52,
+  "sfx": "cinematic-expand",
+  "event": 25.62,
+  "peak_in_file": 0.1545,
+  "starts": 25.4655,
+  "gain_db": -4
+ },
+ {
+  "beat": 53,
+  "sfx": "glass-collapse",
+  "event": 26.16,
+  "peak_in_file": 0.1294,
+  "starts": 26.0306,
+  "gain_db": -2
+ },
+ {
+  "beat": 54,
+  "sfx": "glass-complete",
+  "event": 26.62,
+  "peak_in_file": 0.0083,
+  "starts": 26.6118,
+  "gain_db": -2
+ }
+]

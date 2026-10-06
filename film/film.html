@@ -42,64 +42,65 @@ body.preview #ui { display: flex; }
      the beat comes back on 53. -->
 <script type="application/json" id="beatmap">
 {
-  "bpm": 120, "beats": 54,
-  "music": { "drop": 13, "breakdown": [47, 52], "return": 53 },
+  "bpm": 120,
+  "beats": 54,
+  "music": {"drop": 13, "breakdown": [47, 52], "return": 53},
   "sections": [["Open", 1, 12], ["Glass", 13, 26], ["Stage", 27, 42], ["Order", 43, 46], ["Desk", 47, 52], ["Return", 53, 54]],
   "map": [
-    { "n": 1,  "ev": "«Kuznec.» сжимается в собственную точку гармошкой: wdth 125 → 62, потом scaleX", "sfx": [["cinematic-collapse", 0.36, -4]] },
-    { "n": 2,  "ev": "Точка раздувается в чёрную пилюлю", "sfx": [["glass-expand", 0.56, -2]] },
-    { "n": 3,  "ev": "«/kuznec» поднимается из-под линии маски, входит курсор", "sfx": [["glass-typing", 1.02, -6], ["glass-typing", 1.1, -8]] },
-    { "n": 4,  "ev": "Клик. Шесть лепестков ириса закрывают надпись, пилюля становится кругом", "sfx": [["mechanical-press", 1.5, 0], ["glass-lock", 1.72, -3]] },
-    { "n": 5,  "ev": "Ирис раскрывается на первую обложку — «Вампиризм»", "sfx": [["glass-unlock", 2.04, 0]] },
-    { "n": 6,  "ev": "Круг становится квадратной плиткой и уменьшается", "sfx": [["soft-swipe", 2.56, -3]] },
-    { "n": 7,  "ev": "Карта разворачивается: центр + крест из четырёх плиток", "sfx": [["soft-reorder", 3.08, -2]] },
-    { "n": 8,  "ev": "Углы: ещё четыре плитки разворачиваются от соседей", "sfx": [["soft-reorder", 3.58, -2]] },
-    { "n": 9,  "ev": "Названия поднимаются из-под маски, стеклянные ценники пружинят из нуля", "sfx": [["glass-progress-step", 4.08, -4]] },
-    { "n": 10, "ev": "Сетка перестраивается в бенто, «Вампиризм» — герой 2×2", "sfx": [["glass-snap", 4.68, -2]] },
-    { "n": 11, "ev": "Курсор наводится, плитка-герой приподнимается", "sfx": [["glass-hover", 5.22, -6]] },
-    { "n": 12, "ev": "Клик — зум в плитку, подписи уходят под маску", "sfx": [["mechanical-press", 5.5, 0]] },
-    { "n": 13, "ev": "ДРОП. Зум приземляется; «Вампиризм» стеклянными буквами, по одной", "sfx": [["cinematic-expand", 6.0, -1], ["glass-typing", 6.12, -8], ["glass-typing", 6.32, -8], ["glass-typing", 6.52, -8], ["glass-typing", 6.72, -8]] },
-    { "n": 14, "ev": "Слово дописано: девять стеклянных букв с преломлением и бликом", "sfx": [["glass-typing", 6.92, -8]] },
-    { "n": 15, "ev": "Слово тает в каплю (гу: блюр + порог, стекло поверх остаётся резким)", "sfx": [["glass-collapse", 7.04, -2]] },
-    { "n": 16, "ev": "Капля тянется в стеклянный тулбар, иконки пружинят из нуля", "sfx": [["glass-expand", 7.52, -2]] },
-    { "n": 17, "ev": "Клик по иконке уровня: тулбар становится слайдером, обложка — крупной мозаикой", "sfx": [["mechanical-press", 8.0, 0], ["glass-toggle-on", 8.14, -3]] },
-    { "n": 18, "ev": "Курсор берёт ручку «Обычный»", "sfx": [["glass-drag-start", 8.52, -2]] },
-    { "n": 19, "ev": "Тянем: мозаика мельчает (96 → 40 px), считается из той же картинки", "sfx": [["glass-seek", 8.79, -6], ["glass-seek", 9.07, -6]] },
-    { "n": 20, "ev": "Ещё мельче (24 → 6 px)", "sfx": [["glass-seek", 9.3, -6], ["glass-seek", 9.52, -6], ["glass-seek", 9.74, -6]] },
-    { "n": 21, "ev": "«Улучшенный»: полная детализация, ручка становится стеклянной линзой", "sfx": [["glass-snap", 10.0, 0]] },
-    { "n": 22, "ev": "Линза всплывает в стеклянную сферу", "sfx": [["studio-swipe", 10.52, -3]] },
-    { "n": 23, "ev": "Внутри сферы кругом открывается следующая обложка — «Пламенное лезвие»", "sfx": [["glass-open", 11.04, -2]] },
-    { "n": 24, "ev": "Сфера вырастает в локскрин", "sfx": [["glass-wake", 11.56, -2]] },
-    { "n": 25, "ev": "Стеклянные цифры 21:40 и дата", "sfx": [["glass-progress-step", 12.04, -4]] },
-    { "n": 26, "ev": "Полоска «домой» тянется в стеклянное уведомление Кузнеца", "sfx": [["glass-notification", 12.6, -1]] },
-    { "n": 27, "ev": "Отъезд: появляется телефон, рамка растёт от края экрана", "sfx": [["studio-swipe", 13.04, -3]] },
-    { "n": 28, "ev": "Dynamic Island тянется жидкостью на истончающейся перемычке", "sfx": [["glass-drag-start", 13.54, -3]] },
-    { "n": 29, "ev": "Перемычка рвётся, капля летит по дуге", "sfx": [["glass-send", 14.04, -2]] },
-    { "n": 30, "ev": "Капля раскрывается в чёрную планку окна", "sfx": [["cinematic-expand", 14.52, -4]] },
-    { "n": 31, "ev": "Окно разворачивается шторкой: меню /kuznec, 54 слота, рука и броня", "sfx": [["cinematic-open", 15.02, -3]] },
-    { "n": 32, "ev": "Долгое нажатие: обложка отрывается от обоев", "sfx": [["glass-long-press", 15.52, -2]] },
-    { "n": 33, "ev": "Перетаскивание к слоту 20 (предмет в руке), окно наезжает", "sfx": [["soft-swipe", 16.04, -4]] },
-    { "n": 34, "ev": "Бросок в слот — щелчок", "sfx": [["glass-drop", 16.48, 0]] },
-    { "n": 35, "ev": "Картинка становится шапкой ответа «Улучшения: Меч», слоты уходят", "sfx": [["glass-receive", 17.04, -2]] },
-    { "n": 36, "ev": "Прокрутка: шапка → карточка, рамка и строка цены растут от края картинки", "sfx": [["glass-expand", 17.56, -3]] },
-    { "n": 37, "ev": "Чипы улучшений; клик по «Пламенное лезвие»", "sfx": [["mechanical-press", 18.0, 0]] },
-    { "n": 38, "ev": "Подсветка перекрашивается на выбранный чип", "sfx": [["glass-select", 18.56, -2]] },
-    { "n": 39, "ev": "Оплата: Vault, баланс 128 400 монет — отметка", "sfx": [["mechanical-press", 19.0, -1], ["glass-check", 19.06, -2]] },
-    { "n": 40, "ev": "Кнопка «Меню» перелетает вниз", "sfx": [["soft-swipe", 19.56, -4]] },
-    { "n": 41, "ev": "…и становится «Купить · 32 000 монет»", "sfx": [["studio-snap", 20.06, -2]] },
-    { "n": 42, "ev": "Клик «Купить»", "sfx": [["mechanical-press", 20.5, 0], ["glass-checkout", 20.56, -3]] },
-    { "n": 43, "ev": "Одна чёрная форма: «Списано · 32 000 ✓»", "sfx": [["glass-purchase", 21.06, 0]] },
-    { "n": 44, "ev": "«Куём · %»: счётчик и полоса считаются от t", "sfx": [["glass-progress-step", 21.56, -4], ["glass-progress-step", 21.8, -6]] },
-    { "n": 45, "ev": "«Наносим на предмет»: «+ Пламенное лезвие» едет по линии к мечу", "sfx": [["glass-send", 22.12, -2]] },
-    { "n": 46, "ev": "«Готово ✓» (в плагине — звук ENTITY_PLAYER_LEVELUP)", "sfx": [["arcade-level-up", 22.56, -3]] },
-    { "n": 47, "ev": "Брейк. Круг заливает кадр чёрным за 0,3 с, за углы", "sfx": [["cinematic-close", 23.1, -2]] },
-    { "n": 48, "ev": "Ровно бит чёрного", "sfx": [] },
-    { "n": 49, "ev": "Чёрное сжимается в экран телефона на футаже стола", "sfx": [["cinematic-collapse", 24.2, -4]] },
-    { "n": 50, "ev": "Тот же ирис открывается: «Улучшение Пламенное лезвие куплено за 32 000 монет.»", "sfx": [["glass-unlock", 24.56, -2]] },
-    { "n": 51, "ev": "Ирис закрывается", "sfx": [["glass-lock", 25.12, -3]] },
-    { "n": 52, "ev": "Экран заполняет кадр", "sfx": [["cinematic-expand", 25.62, -4]] },
-    { "n": 53, "ev": "Бит возвращается: кадр сжимается в пилюлю, пилюля — в точку", "sfx": [["glass-collapse", 26.16, -2]] },
-    { "n": 54, "ev": "Буквы выпрыгивают из точки — последний кадр равен первому", "sfx": [["glass-complete", 26.62, -2]] }
+    {"n": 1, "ev": "«Kuznec.» сжимается в собственную точку гармошкой: wdth 125 → 62, потом scaleX", "sfx": [["cinematic-collapse", 0.36, -4]]},
+    {"n": 2, "ev": "Точка раздувается в чёрную пилюлю", "sfx": [["glass-expand", 0.56, -2]]},
+    {"n": 3, "ev": "«/kuznec» поднимается из-под линии маски, входит курсор", "sfx": [["glass-typing", 1.02, -6], ["glass-typing", 1.1, -8]]},
+    {"n": 4, "ev": "Клик. Шесть лепестков ириса закрывают надпись, пилюля становится кругом", "sfx": [["mechanical-press", 1.5, 0], ["glass-lock", 1.72, -3]]},
+    {"n": 5, "ev": "Ирис раскрывается на первую обложку — «Вампиризм»", "sfx": [["glass-unlock", 2.04, 0]]},
+    {"n": 6, "ev": "Круг становится квадратной плиткой и уменьшается", "sfx": [["soft-swipe", 2.56, -3]]},
+    {"n": 7, "ev": "Карта разворачивается: центр + крест из четырёх плиток", "sfx": [["soft-reorder", 3.08, -2]]},
+    {"n": 8, "ev": "Углы: ещё четыре плитки разворачиваются от соседей", "sfx": [["soft-reorder", 3.58, -2]]},
+    {"n": 9, "ev": "Названия поднимаются из-под маски, стеклянные ценники пружинят из нуля", "sfx": [["glass-progress-step", 4.08, -4]]},
+    {"n": 10, "ev": "Сетка перестраивается в бенто, «Вампиризм» — герой 2×2", "sfx": [["glass-snap", 4.68, -2]]},
+    {"n": 11, "ev": "Курсор наводится, плитка-герой приподнимается", "sfx": [["glass-hover", 5.22, -6]]},
+    {"n": 12, "ev": "Клик — зум в плитку, подписи уходят под маску", "sfx": [["mechanical-press", 5.5, 0]]},
+    {"n": 13, "ev": "ДРОП. Зум приземляется; «Вампиризм» стеклянными буквами, по одной", "sfx": [["cinematic-expand", 6.0, -1], ["glass-typing", 6.12, -8], ["glass-typing", 6.32, -8], ["glass-typing", 6.52, -8], ["glass-typing", 6.72, -8]]},
+    {"n": 14, "ev": "Слово дописано: девять стеклянных букв с преломлением и бликом", "sfx": [["glass-typing", 6.92, -8]]},
+    {"n": 15, "ev": "Слово тает в каплю (гу: блюр + порог, стекло поверх остаётся резким)", "sfx": [["glass-collapse", 7.04, -2]]},
+    {"n": 16, "ev": "Капля тянется в стеклянный тулбар, иконки пружинят из нуля", "sfx": [["glass-expand", 7.52, -2]]},
+    {"n": 17, "ev": "Клик по иконке уровня: тулбар становится слайдером, обложка — крупной мозаикой", "sfx": [["mechanical-press", 8.0, 0], ["glass-toggle-on", 8.14, -3]]},
+    {"n": 18, "ev": "Курсор берёт ручку «Обычный»", "sfx": [["glass-drag-start", 8.52, -2], ["glass-seek", 8.801, -6]]},
+    {"n": 19, "ev": "Тянем: мозаика мельчает шагами 96 → 40 → 24 px, считается из той же картинки", "sfx": [["glass-seek", 8.983, -6], ["glass-seek", 9.164, -6], ["glass-seek", 9.345, -6]]},
+    {"n": 20, "ev": "Ещё мельче: 12 → 6 → 3 → полная детализация", "sfx": [["glass-seek", 9.527, -6], ["glass-seek", 9.708, -6], ["glass-seek", 9.889, -6]]},
+    {"n": 21, "ev": "«Улучшенный»: полная детализация, ручка становится стеклянной линзой", "sfx": [["glass-snap", 9.99, 0]]},
+    {"n": 22, "ev": "Линза всплывает в стеклянную сферу", "sfx": [["studio-swipe", 10.52, -3]]},
+    {"n": 23, "ev": "Внутри сферы кругом открывается следующая обложка — «Пламенное лезвие»", "sfx": [["glass-open", 11.04, -2]]},
+    {"n": 24, "ev": "Сфера вырастает в локскрин", "sfx": [["glass-wake", 11.56, -2]]},
+    {"n": 25, "ev": "Стеклянные цифры 21:40 и дата", "sfx": [["glass-progress-step", 12.04, -4]]},
+    {"n": 26, "ev": "Полоска «домой» тянется в стеклянное уведомление Кузнеца", "sfx": [["glass-notification", 12.6, -1]]},
+    {"n": 27, "ev": "Отъезд: появляется телефон, рамка растёт от края экрана", "sfx": [["studio-swipe", 13.04, -3]]},
+    {"n": 28, "ev": "Dynamic Island тянется жидкостью на истончающейся перемычке", "sfx": [["glass-drag-start", 13.54, -3]]},
+    {"n": 29, "ev": "Перемычка рвётся, капля летит по дуге", "sfx": [["glass-send", 14.04, -2]]},
+    {"n": 30, "ev": "Капля раскрывается в чёрную планку окна", "sfx": [["cinematic-expand", 14.52, -4]]},
+    {"n": 31, "ev": "Окно разворачивается шторкой: меню /kuznec, 54 слота, рука и броня", "sfx": [["cinematic-open", 15.02, -3]]},
+    {"n": 32, "ev": "Долгое нажатие: обложка отрывается от обоев", "sfx": [["glass-long-press", 15.52, -2]]},
+    {"n": 33, "ev": "Перетаскивание к слоту 20 (предмет в руке), окно наезжает", "sfx": [["soft-swipe", 16.04, -4]]},
+    {"n": 34, "ev": "Бросок в слот — щелчок", "sfx": [["glass-drop", 16.48, 0]]},
+    {"n": 35, "ev": "Картинка становится шапкой ответа «Улучшения: Меч», слоты уходят", "sfx": [["glass-receive", 17.04, -2]]},
+    {"n": 36, "ev": "Прокрутка: шапка → карточка, рамка и строка цены растут от края картинки", "sfx": [["glass-expand", 17.56, -3]]},
+    {"n": 37, "ev": "Чипы улучшений; клик по «Пламенное лезвие»", "sfx": [["mechanical-press", 18.0, 0]]},
+    {"n": 38, "ev": "Подсветка перекрашивается на выбранный чип", "sfx": [["glass-select", 18.56, -2]]},
+    {"n": 39, "ev": "Оплата: Vault, баланс 128 400 монет — отметка", "sfx": [["mechanical-press", 19.0, -1], ["glass-check", 19.06, -2]]},
+    {"n": 40, "ev": "Кнопка «Меню» перелетает вниз", "sfx": [["soft-swipe", 19.56, -4]]},
+    {"n": 41, "ev": "…и становится «Купить · 32 000 монет»", "sfx": [["studio-snap", 20.06, -2]]},
+    {"n": 42, "ev": "Клик «Купить»", "sfx": [["mechanical-press", 20.5, 0], ["glass-checkout", 20.56, -3]]},
+    {"n": 43, "ev": "Одна чёрная форма: «Списано · 32 000 ✓»", "sfx": [["glass-purchase", 21.06, 0]]},
+    {"n": 44, "ev": "«Куём · %»: счётчик и полоса считаются от t", "sfx": [["glass-progress-step", 21.56, -4], ["glass-progress-step", 21.8, -6]]},
+    {"n": 45, "ev": "«Наносим на предмет»: «+ Пламенное лезвие» едет по линии к мечу", "sfx": [["glass-send", 22.12, -2]]},
+    {"n": 46, "ev": "«Готово ✓» (в плагине — звук ENTITY_PLAYER_LEVELUP)", "sfx": [["arcade-level-up", 22.56, -3]]},
+    {"n": 47, "ev": "Брейк. Круг заливает кадр чёрным за 0,3 с, за углы", "sfx": [["cinematic-close", 23.1, -2]]},
+    {"n": 48, "ev": "Ровно бит чёрного", "sfx": []},
+    {"n": 49, "ev": "Чёрное сжимается в экран телефона на футаже стола", "sfx": [["cinematic-collapse", 24.2, -4]]},
+    {"n": 50, "ev": "Тот же ирис открывается: «Улучшение Пламенное лезвие куплено за 32 000 монет.»", "sfx": [["glass-unlock", 24.56, -2]]},
+    {"n": 51, "ev": "Ирис закрывается", "sfx": [["glass-lock", 25.12, -3]]},
+    {"n": 52, "ev": "Экран заполняет кадр", "sfx": [["cinematic-expand", 25.62, -4]]},
+    {"n": 53, "ev": "Бит возвращается: кадр сжимается в пилюлю, пилюля — в точку", "sfx": [["glass-collapse", 26.16, -2]]},
+    {"n": 54, "ev": "Буквы выпрыгивают из точки — последний кадр равен первому", "sfx": [["glass-complete", 26.62, -2]]}
   ]
 }
 </script>
@@ -510,12 +511,12 @@ const CELL = GRID.tile + GRID.gap;
 // 3×3 map layout (col, row from −1..1) and bento layout (4×3, hero 2×2)
 const TILES = [
   { key: 'vampirism', g: [0, 0],   b: [1, 0, 2, 2], order: 0 },
-  { key: 'flame',     g: [0, -1],  b: [0, 0, 1, 1], order: 1, from: 'C', axis: 'y' },
+  { key: 'flame',     g: [0, -1],  b: [2, 2, 1, 1], order: 1, from: 'C', axis: 'y' },
   { key: 'shield',    g: [1, 0],   b: [3, 1, 1, 1], order: 2, from: 'C', axis: 'x' },
   { key: 'laststand', g: [0, 1],   b: [1, 2, 1, 1], order: 3, from: 'C', axis: 'y' },
   { key: 'nighteye',  g: [-1, 0],  b: [0, 1, 1, 1], order: 4, from: 'C', axis: 'x' },
   { key: 'poison',    g: [1, -1],  b: [3, 0, 1, 1], order: 5, from: 'N', axis: 'x' },
-  { key: 'wind',      g: [-1, -1], b: [2, 2, 1, 1], order: 6, from: 'N', axis: 'x' },
+  { key: 'wind',      g: [-1, -1], b: [0, 0, 1, 1], order: 6, from: 'N', axis: 'x' },
   { key: 'rabbit',    g: [1, 1],   b: [3, 2, 1, 1], order: 7, from: 'S', axis: 'x' },
   { key: 'feather',   g: [-1, 1],  b: [0, 2, 1, 1], order: 8, from: 'S', axis: 'x' },
 ];
@@ -530,7 +531,7 @@ const wmLetters = [...BRAND].map((ch) => el('div', 'abs nowrap', wmWrap, {
   font: `${WM.wght} ${WM.size}px Archivo`, lineHeight: '1', letterSpacing: '0', transformOrigin: '0 0',
 }));
 wmLetters.forEach((e, i) => (e.textContent = BRAND[i]));
-const wmDot = el('div', 'abs', openWorld, { background: 'var(--ink)', overflow: 'hidden' });
+const wmDot = el('div', 'abs', openWorld, { background: 'var(--ink)', overflow: 'hidden', zIndex: '3' });
 const pillLabelMask = el('div', 'mask', wmDot, { inset: '0', borderRadius: 'inherit' });
 const pillLabel = el('div', 'abs nowrap', pillLabelMask, { font: '600 56px Geist', color: '#fff', letterSpacing: '-0.5px', lineHeight: '1' });
 pillLabel.textContent = '/kuznec';
@@ -758,6 +759,7 @@ OPEN.update = (t) => {
       r = lerp(r, 0, tw(t, B(12) + 0.04, B(13), eio4));
     }
     show(T.root, vis);
+    T.root.style.zIndex = i === 0 ? '2' : '1';          // the hero stays on top while the others rearrange
     box(T.root, x, y, w, h, {
       borderRadius: px(r),
       transformOrigin: `${px(ox)} ${px(oy)}`,
@@ -776,11 +778,11 @@ OPEN.update = (t) => {
   // ── cursor ──
   let cur = null;
   if (t >= B(3) && t < B(6)) {
-    const [x, y] = cursorPath(t, 1250, 1300, [[B(3), B(4) - 0.08, 880, 770, eio]]);
-    const leave = cursorPath(t, 0, 0, [[B(5) + 0.1, B(6), 380, 560, eio]]);
+    const [x, y] = cursorPath(t, 1560, 1600, [[B(3), B(4) - 0.08, 880, 770, eio]]);
+    const leave = cursorPath(t, 0, 0, [[B(5) + 0.1, B(6) - 0.02, 820, 900, eio]]);
     cur = { x: x + leave[0], y: y + leave[1], size: 46, press: press(t, B(4)), visible: true };
   } else if (t >= B(10) + 0.3 && t < B(13)) {
-    const [x, y] = cursorPath(t, 1300, 1380, [[B(10) + 0.3, B(11) + 0.3, 905, 640, eio]]);
+    const [x, y] = cursorPath(t, 1500, 1620, [[B(10) + 0.3, B(11) + 0.3, 905, 640, eio]]);
     const [sx, sy] = toScreen(cam, x, y);
     cur = { x: sx, y: sy, size: 46 * cam.s, press: press(t, B(12)), visible: true };
   }
@@ -801,6 +803,7 @@ const BUY = UPGRADES[COVER2];
 const WORD = UPGRADES[COVER1].name;
 const DROP = { x: 720, y: 1170 };                 // where the word melts / the toolbar lives
 const SLIDE = { x0: 720 - 470, x1: 720 + 470 };   // knob travel
+const SLIDER_T0 = B(18) + 0.12, SLIDER_T1 = B(21) - 0.02;
 
 // ── layers ──
 const bgCanvas = canvas(W, H, pw);
@@ -975,6 +978,16 @@ function paintBg(block) {
   ctx.imageSmoothingEnabled = true;
 }
 const drawBgClone = (ctx, gx, gy) => ctx.drawImage(bgCanvas, -gx, -gy);
+// Slider → mosaic block size. Seven steps (one per tick); each step resizes the blocks over
+// ~3 frames through intermediate sizes instead of jumping in one.
+const MOSAIC = [96, 64, 40, 24, 12, 6, 3, 1], MOSAIC_STEPS = 7.5;
+function mosaicBlock(p) {
+  const kf = p * MOSAIC_STEPS, k = Math.min(7, Math.floor(kf));
+  if (k === 0) return MOSAIC[0];
+  const win = (0.05 / (SLIDER_T1 - SLIDER_T0)) * MOSAIC_STEPS;   // 50 ms in level units
+  const u = smooth(clamp((kf - k) / win));
+  return Math.max(1, Math.round(Math.exp(lerp(Math.log(MOSAIC[k - 1]), Math.log(MOSAIC[k]), u))));
+}
 // lock-screen geometry while the orb grows into it (g: 0 = orb, 1 = screen)
 const ORB = { cx: 720, cy: 640, r: 280 };
 function screenRect(g) {
@@ -1018,10 +1031,10 @@ PHONE.update = (t) => {
   const q = Math.max(1, cam.s);
 
   // ───────── background cover / mosaic ─────────
-  const sliderP = tw(t, B(18) + 0.1, B(21) - 0.05, eio);           // knob travel 0..1
+  const sliderP = tw(t, SLIDER_T0, SLIDER_T1, (u) => u);            // knob travel 0..1, even pace: one mosaic step per tick
   let block = 1;
-  if (t >= B(17) + 0.05 && t < B(18) + 0.1) block = Math.round(Math.exp(lerp(0, Math.log(96), tw(t, B(17) + 0.05, B(17) + 0.3, eo))));
-  else if (t >= B(18) + 0.1 && t < B(21)) block = sliderP >= 0.995 ? 1 : [96, 64, 40, 24, 12, 6, 3][Math.min(6, Math.floor(sliderP * 7))];
+  if (t >= B(17) + 0.05 && t < SLIDER_T0) block = Math.round(Math.exp(lerp(0, Math.log(96), tw(t, B(17) + 0.05, B(17) + 0.3, eo))));
+  else if (t >= SLIDER_T0 && t < B(21)) block = mosaicBlock(sliderP);
   const bgOn = t < B(24) + 0.6;
   show(bgCanvas, bgOn);
   if (bgOn) paintBg(block);
@@ -1097,7 +1110,7 @@ PHONE.update = (t) => {
   if (knobOn) {
     const k0 = pop(t, B(17) + 0.14, 0.4, 0.55);
     const grab = track(t, 0, [[B(18) + 0.02, 1, 0.3, 0.6], [B(21), 0, 0.3, 0.6]]);
-    let d = 104 * k0 * (1 + 0.18 * grab);
+    let d = 124 * k0 * (1 + 0.16 * grab);
     let cx = knobX, cy = DROP.y;
     const lens = track(t, 0, [[B(21), 1, 0.5, 0.62]]);
     d = lerp(d, 300, lens);
@@ -1110,7 +1123,7 @@ PHONE.update = (t) => {
     const refr = lerp(lerp(lerp(46, 120, lens), 160, rise), 0, gg);
     updateGlass(orb, {
       x: rect.x, y: rect.y, w: rect.w, h: rect.h, r: rect.r, bevel: Math.max(10, lerp(lerp(30, 120, lens), 240, rise) * (1 - gg)),
-      scale: refr, tint: 0.06 * (1 - gg), rimA: 1 - gg, shadow: 0.18 * (1 - gg),
+      scale: refr, tint: lerp(0.16, 0.06, clamp(lens)) * (1 - gg), rimA: 1 - gg, shadow: 0.18 * (1 - gg),
       draw: (ctx, gx, gy) => {
         ctx.drawImage(bgCanvas, -gx, -gy);
         // track under the knob so the glass bends it
@@ -1405,14 +1418,20 @@ PHONE.update = (t) => {
   // ───────── cursor ─────────
   let cur = null;
   const scr = (x, y, size = 46) => { const [sx, sy] = toScreen(cam, x, y); return { x: sx, y: sy, size: size * cam.s, visible: true }; };
-  if (t >= B(16) + 0.1 && t < B(21) + 0.15) {
+  const ZOOMED = W / HERO[2];                 // the camera push at the drop, carried by the cursor
+  if (t < B(13) + 0.3) {
+    // the cursor that clicked the hero tile slides out after the landing
+    const x0 = (905 - CX) * ZOOMED + CX, y0 = (640 - (HERO[1] + HERO[3] / 2)) * ZOOMED + CY;
+    const [x, y] = cursorPath(t, x0, y0, [[B(13), B(13) + 0.28, x0 + 520, y0 + 640, ei]]);
+    cur = { x, y, size: 46 * ZOOMED, press: 0, visible: true };
+  } else if (t >= B(16) + 0.1 && t < B(21) + 0.15) {
     const planX = DROP.x - 75;
-    let [x, y] = cursorPath(t, 1300, 1420, [
+    let [x, y] = cursorPath(t, 1560, 1620, [
       [B(16) + 0.1, B(17) - 0.05, planX + 8, DROP.y + 10, eio],
       [B(17) + 0.2, B(18) - 0.04, SLIDE.x0 + 12, DROP.y + 14, eio],
     ]);
-    if (t >= B(18) + 0.1) { x = knobX + 12; y = DROP.y + 14; }
-    cur = { ...scr(x, y), press: press(t, B(17)) + (t >= B(18) && t < B(21) ? clamp((t - B(18)) / 0.05) : 0) - (t >= B(21) ? 0 : 0) };
+    if (t >= SLIDER_T0) { x = knobX + 12; y = DROP.y + 14; }
+    cur = { ...scr(x, y, 46 * ZOOMED), press: press(t, B(17)) + (t >= B(18) && t < B(21) ? clamp((t - B(18)) / 0.05) : 0) };
     if (t >= B(21)) cur.press = 1 - spring(t - B(21), 0.22, 0.6);
     cur.y += tw(t, B(21) + 0.02, B(21) + 0.15, ei) * 400;
   } else if (t >= B(31) && t < B(43)) {
@@ -1421,12 +1440,13 @@ PHONE.update = (t) => {
     const chip2 = [WIN.x + cxs[1] + cw[1] / 2, WIN.y + CH.y + CH.h / 2];
     const radioC = [WIN.x + 200 + 2067 - 112, WIN.y + 1450 + 105];
     const payC = [PAY.x + PAY.w / 2, PAY.y + PAY.h / 2];
-    const [x, y] = cursorPath(t, 1300, 2600, [
+    const [x, y] = cursorPath(t, 1800, 3700, [
       [B(31), B(32) - 0.06, CX + 40, CY + 40, eio],
       [B(33), B(34) - 0.04, s20c[0] + 40, s20c[1] + 40, eio],
       [B(36) + 0.4, B(37) - 0.04, chip2[0], chip2[1], eio],
       [B(38) + 0.3, B(39) - 0.04, radioC[0], radioC[1], eio],
       [B(41) + 0.1, B(42) - 0.04, payC[0] + 300, payC[1], eio],
+      [B(42) + 0.16, B(43) - 0.02, payC[0] + 1500, payC[1] + 1300, ei],
     ]);
     cur = scr(x, y, 46);
     cur.press = (t >= B(32) && t < B(34) - 0.04 ? clamp((t - B(32)) / 0.06) : t >= B(34) - 0.04 ? 1 - spring(t - B(34) + 0.04, 0.22, 0.6) : 0)
@@ -1467,6 +1487,7 @@ async function footageAt(ft) {
 }
 // Minecraft chat colours from messages.yml: &a green, &6 gold
 const MC = { a: '#55FF55', g: '#FFAA00', w: '#FFFFFF', gray: '#AAAAAA' };
+const INK = '#0B0B0C';
 const MESSAGE = [[MC.a, 'Улучшение '], [MC.g, BUY.name], [MC.a, ' куплено за '], [MC.g, `${money(BUY.price)} монет`], [MC.a, '.']];
 function wrapRuns(ctx, runs, maxW) {
   // split coloured runs into words, then lay them out in lines
@@ -1482,7 +1503,7 @@ function wrapRuns(ctx, runs, maxW) {
   return lines;
 }
 function drawMessage(ctx, w, h) {
-  ctx.fillStyle = '#000'; ctx.fillRect(-w / 2, -h / 2, w, h);
+  ctx.fillStyle = INK; ctx.fillRect(-w / 2, -h / 2, w, h);
   const u = w / 600;                                          // layout unit: design at 600 px wide
   ctx.save(); ctx.scale(u, u);
   const W2 = w / u, H2 = h / u;
@@ -1511,7 +1532,7 @@ function drawMessage(ctx, w, h) {
 DESK.update = async (t) => {
   const ctx = deskCanvas.getContext('2d');
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = INK; ctx.fillRect(0, 0, W, H);
   if (t < B(49)) return {};                                   // the held beat of black
   await footageAt(t - B(49) + 0.2);
   const Q = QUAD, k = W / Q.size;
@@ -1519,7 +1540,7 @@ DESK.update = async (t) => {
   // draw the footage so the phone screen sits at the centre of the square
   ctx.save();
   ctx.translate(CX, CY); ctx.scale(k * Z, k * Z); ctx.translate(-Q.cx, -Q.cy);
-  ctx.drawImage(deskVideo, 0, 0, Q.size, Q.size);
+  ctx.drawImage(deskVideo, 0, 0, Q.vw || Q.size, Q.vh || Q.size);   // footage pixels; any aspect
   ctx.restore();
   // the black shape: full frame → the screen (beat 49) → full frame again (beat 52)
   const sw = Q.w * k * Z, sh = Q.h * k * Z, sr = Q.r * k * Z;
@@ -1531,13 +1552,15 @@ DESK.update = async (t) => {
   ctx.save();
   ctx.translate(CX, CY); ctx.rotate(ang);
   rrPath(ctx, -w / 2, -h / 2, w, h, r); ctx.clip();
-  ctx.fillStyle = '#000'; ctx.fillRect(-w / 2, -h / 2, w, h);
+  ctx.fillStyle = INK; ctx.fillRect(-w / 2, -h / 2, w, h);
   // iris opens onto the message (beat 50) and closes again (beat 51)
   const open = tw(t, B(50), B(50) + 0.3, eo) * (1 - tw(t, B(51), B(51) + 0.3, eio));
   if (open > 0.001) drawMessage(ctx, sw, sh);
   const R = Math.hypot(w, h) / 2 + 6;                         // blades always reach past the shape's corners
   const rot = 0.95 * open + 0.9 * tw(t, B(51), B(51) + 0.3, eio);
-  if (open < 0.999) drawIris(ctx, 0, 0, R, open * R * 1.02, rot, ['#0f0f11', '#131316'], '#2a2a2f', 2);
+  // blades are ink-black; their seams draw in as the shape lands and thin out as it fills the frame
+  const shade = Math.round(14 * u), seam = Math.round(11 + 30 * u);
+  if (open < 0.999) drawIris(ctx, 0, 0, R, open * R * 1.02, rot, [INK, `rgb(${11 + shade * 0.25},${11 + shade * 0.25},${12 + shade * 0.3})`], `rgb(${seam},${seam},${seam + 3})`, 2.5 * u);
   ctx.restore();
   return {};
 };
