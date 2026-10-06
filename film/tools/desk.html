@@ -1,0 +1,143 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<script type="importmap">{ "imports": {
+  "three": "./node_modules/three/build/three.module.js",
+  "three/addons/": "./node_modules/three/examples/jsm/" } }</script>
+<style>html,body{margin:0;background:#000}</style>
+</head><body>
+<script type="module">
+// Stand-in for the desk footage: locked-off top-down shot of a phone on a plain desk,
+// with plant shadows moving across it. Rendered frame by frame (pure function of time).
+import * as THREE from 'three';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+function rng(seed) { let s = seed >>> 0; return () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296); }
+const SIZE = 2160;
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(1);
+renderer.setSize(SIZE, SIZE);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.22;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.VSMShadowMap;
+document.body.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), 0.04).texture;
+scene.environmentIntensity = 0.35;
+const camera = new THREE.PerspectiveCamera(30, 1, 1, 100);
+camera.position.set(0, 0, 9.5);
+camera.lookAt(0, 0, 0);
+
+// desk: warm off-white with a faint grain and soft large-scale unevenness
+const tex = (() => {
+  const c = document.createElement('canvas'); c.width = c.height = 2048;
+  const g = c.getContext('2d'); g.fillStyle = '#f2ece2'; g.fillRect(0, 0, 2048, 2048);
+  const r = rng(5);
+  for (let i = 0; i < 90; i++) {
+    const x = r() * 2048, y = r() * 2048, rad = 200 + r() * 600;
+    const gr = g.createRadialGradient(x, y, 0, x, y, rad);
+    const a = 0.025 * r();
+    gr.addColorStop(0, `rgba(${r() < 0.5 ? '255,250,240' : '200,190,175'},${a})`); gr.addColorStop(1, 'rgba(0,0,0,0)');
+    g.fillStyle = gr; g.fillRect(0, 0, 2048, 2048);
+  }
+  const im = g.getImageData(0, 0, 2048, 2048), d = im.data;
+  for (let i = 0; i < d.length; i += 4) { const n = (r() - 0.5) * 7; d[i] += n; d[i + 1] += n; d[i + 2] += n; }
+  g.putImageData(im, 0, 0);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8;
+  return t;
+})();
+const desk = new THREE.Mesh(new THREE.PlaneGeometry(14, 14), new THREE.MeshStandardMaterial({ map: tex, roughness: 0.92 }));
+desk.receiveShadow = true;
+scene.add(desk);
+
+// phone lying flat, slightly turned
+const PHONE = { w: 1.42, h: 2.98, d: 0.16, rot: (-8 * Math.PI) / 180, x: 0.1, y: -0.05 };
+const phone = new THREE.Group();
+const body = new THREE.Mesh(new RoundedBoxGeometry(PHONE.w, PHONE.h, PHONE.d, 6, 0.2),
+  new THREE.MeshStandardMaterial({ color: 0x3a3c40, metalness: 0.9, roughness: 0.28 }));
+body.castShadow = true; body.receiveShadow = true;
+phone.add(body);
+const SCREEN = { w: PHONE.w - 0.12, h: PHONE.h - 0.12, r: 0.16 };
+const shape = new THREE.Shape();
+{ const { w, h, r } = SCREEN, x = -w / 2, y = -h / 2;
+  shape.moveTo(x + r, y); shape.lineTo(x + w - r, y); shape.quadraticCurveTo(x + w, y, x + w, y + r);
+  shape.lineTo(x + w, y + h - r); shape.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  shape.lineTo(x + r, y + h); shape.quadraticCurveTo(x, y + h, x, y + h - r);
+  shape.lineTo(x, y + r); shape.quadraticCurveTo(x, y, x + r, y); }
+const screen = new THREE.Mesh(new THREE.ShapeGeometry(shape, 24),
+  new THREE.MeshPhysicalMaterial({ color: 0x050506, roughness: 0.12, metalness: 0.0, clearcoat: 1, clearcoatRoughness: 0.08 }));
+screen.position.z = PHONE.d / 2 + 0.002;
+screen.receiveShadow = true;
+phone.add(screen);
+phone.position.set(PHONE.x, PHONE.y, PHONE.d / 2);
+phone.rotation.z = PHONE.rot;
+scene.add(phone);
+
+// light: warm low sun from the upper left, through a plant that is out of frame
+scene.add(new THREE.HemisphereLight(0xfff7ec, 0xd8cfc0, 1.25));
+const sun = new THREE.DirectionalLight(0xfff1dc, 2.9);
+sun.position.set(-7.5, 6.3, 12);
+sun.castShadow = true;
+sun.shadow.mapSize.set(4096, 4096);
+sun.shadow.radius = 7; sun.shadow.blurSamples = 25;
+Object.assign(sun.shadow.camera, { left: -10, right: 10, top: 10, bottom: -10, near: 0.5, far: 40 });
+sun.shadow.bias = -0.0005;
+scene.add(sun);
+
+// plant: a few branches of leaves between the sun and the desk
+const leafShape = new THREE.Shape();
+leafShape.moveTo(0, 0);
+leafShape.bezierCurveTo(0.22, 0.18, 0.24, 0.62, 0, 0.95);
+leafShape.bezierCurveTo(-0.24, 0.62, -0.22, 0.18, 0, 0);
+const leafGeo = new THREE.ShapeGeometry(leafShape, 16);
+const leafMat = new THREE.MeshStandardMaterial({ color: 0x3d6b3a, side: THREE.DoubleSide });
+const branches = [];
+const r = rng(11);
+// out of frame (the camera sees |x|,|y| < ~1.2 at this height); the shadows land at
+// (x + 0.625 z, y − 0.525 z) for the sun direction below; they sit high enough to stay out of view.
+const SPOTS = [[-4.4, 4.4], [-2.0, 5.4], [-5.2, 2.4], [-4.2, 6.0], [-6.0, 4.0], [0.4, 5.0]];
+for (let b = 0; b < SPOTS.length; b++) {
+  const br = new THREE.Group();
+  br.position.set(SPOTS[b][0], SPOTS[b][1], 6.3 + r() * 0.5);
+  for (let i = 0; i < 7; i++) {
+    const leaf = new THREE.Mesh(leafGeo, leafMat);
+    const a = r() * Math.PI * 2;
+    leaf.position.set(Math.cos(a) * (0.4 + r() * 1.1), Math.sin(a) * (0.4 + r() * 1.1), r() * 0.5);
+    leaf.rotation.set(r() * 0.6, r() * 0.6, a - Math.PI / 2 + (r() - 0.5));
+    leaf.scale.setScalar(1.0 + r() * 0.8);
+    leaf.castShadow = true;
+    br.add(leaf);
+  }
+  br.userData = { ph: r() * 6.28, amp: 0.05 + r() * 0.05, f: 0.35 + r() * 0.3 };
+  scene.add(br);
+  branches.push(br);
+}
+
+window.frame = (t) => {
+  for (const br of branches) {
+    const u = br.userData;
+    br.rotation.z = u.amp * Math.sin(2 * Math.PI * u.f * t + u.ph);
+    br.rotation.x = 0.6 * u.amp * Math.sin(2 * Math.PI * u.f * 0.7 * t + u.ph * 1.3);
+    br.position.x += 0;
+  }
+  renderer.render(scene, camera);
+  return renderer.domElement.toDataURL('image/png');
+};
+// the screen's outline in frame pixels (corners projected through the camera)
+window.screenQuad = () => {
+  phone.updateMatrixWorld(true);
+  const pts = [[-1, -1], [1, -1], [1, 1], [-1, 1], [0, 0]].map(([sx, sy]) => {
+    const v = new THREE.Vector3((sx * SCREEN.w) / 2, (sy * SCREEN.h) / 2, PHONE.d / 2 + 0.002).applyMatrix4(phone.matrixWorld).project(camera);
+    return [((v.x + 1) / 2) * SIZE, ((1 - v.y) / 2) * SIZE];
+  });
+  const [p0, p1, p2] = pts;
+  const w = Math.hypot(p1[0] - p0[0], p1[1] - p0[1]), h = Math.hypot(p2[0] - p1[0], p2[1] - p1[1]);
+  // screen pixels per world unit, for the corner radius
+  const k = w / SCREEN.w;
+  return { size: SIZE, corners: pts.slice(0, 4), cx: pts[4][0], cy: pts[4][1], w, h, angle: Math.atan2(p1[1] - p0[1], p1[0] - p0[0]), r: SCREEN.r * k };
+};
+window.ready = true;
+</script></body></html>

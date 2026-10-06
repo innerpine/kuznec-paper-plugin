@@ -1,0 +1,1607 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Kuznec — launch film</title>
+<style>
+@font-face { font-family: 'Archivo'; src: url(assets/fonts/archivo-latin.woff2) format('woff2'); font-weight: 100 900; font-stretch: 62% 125%; font-display: block; }
+@font-face { font-family: 'Geist'; src: url(assets/fonts/geist-latin.woff2) format('woff2'); font-weight: 100 900; font-display: block;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Geist'; src: url(assets/fonts/geist-cyrillic.woff2) format('woff2'); font-weight: 100 900; font-display: block;
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: 'Geist Mono'; src: url(assets/fonts/geistmono-latin.woff2) format('woff2'); font-weight: 100 900; font-display: block;
+  unicode-range: U+0000-00FF, U+2000-206F; }
+@font-face { font-family: 'Geist Mono'; src: url(assets/fonts/geistmono-cyrillic.woff2) format('woff2'); font-weight: 100 900; font-display: block;
+  unicode-range: U+0400-045F; }
+
+:root { --paper: #F3EFE7; --ink: #0B0B0C; --line: #DCD6CA; }
+html, body { margin: 0; background: #1a1a1a; }
+body.preview { display: grid; place-items: center; min-height: 100vh; }
+#frame { width: 1440px; height: 1440px; transform-origin: 0 0; }
+#stage { position: relative; width: 1440px; height: 1440px; overflow: hidden; background: var(--paper);
+  font-family: 'Geist', system-ui, sans-serif; color: var(--ink); -webkit-font-smoothing: antialiased; }
+.abs { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+.act { position: absolute; inset: 0; visibility: hidden; }
+.world { position: absolute; left: 0; top: 0; width: 0; height: 0; transform-origin: 0 0; }
+.mask { position: absolute; overflow: hidden; }
+.nowrap { white-space: nowrap; }
+#defs { position: absolute; width: 0; height: 0; }
+#cursor { position: absolute; left: 0; top: 0; width: 32px; height: 32px; transform-origin: 0 0; z-index: 50; }
+#ui { position: fixed; left: 0; right: 0; bottom: 0; display: none; gap: 12px; align-items: center; padding: 10px 16px;
+  background: rgba(20,20,20,.9); color: #eee; font: 13px 'Geist Mono', monospace; }
+body.preview #ui { display: flex; }
+#ui input { flex: 1; }
+</style>
+</head>
+<body>
+<div id="frame"><div id="stage">
+  <svg id="defs" xmlns="http://www.w3.org/2000/svg"><defs></defs></svg>
+</div></div>
+<!-- Beat map: one event per beat. sfx = [[file, time in s, gain dB], ...]; each file is placed so that its
+     measured peak lands on that time. music: the track's drop goes on beat 13, the breakdown on 47–52,
+     the beat comes back on 53. -->
+<script type="application/json" id="beatmap">
+{
+  "bpm": 120, "beats": 54,
+  "music": { "drop": 13, "breakdown": [47, 52], "return": 53 },
+  "sections": [["Open", 1, 12], ["Glass", 13, 26], ["Stage", 27, 42], ["Order", 43, 46], ["Desk", 47, 52], ["Return", 53, 54]],
+  "map": [
+    { "n": 1,  "ev": "«Kuznec.» сжимается в собственную точку гармошкой: wdth 125 → 62, потом scaleX", "sfx": [["cinematic-collapse", 0.36, -4]] },
+    { "n": 2,  "ev": "Точка раздувается в чёрную пилюлю", "sfx": [["glass-expand", 0.56, -2]] },
+    { "n": 3,  "ev": "«/kuznec» поднимается из-под линии маски, входит курсор", "sfx": [["glass-typing", 1.02, -6], ["glass-typing", 1.1, -8]] },
+    { "n": 4,  "ev": "Клик. Шесть лепестков ириса закрывают надпись, пилюля становится кругом", "sfx": [["mechanical-press", 1.5, 0], ["glass-lock", 1.72, -3]] },
+    { "n": 5,  "ev": "Ирис раскрывается на первую обложку — «Вампиризм»", "sfx": [["glass-unlock", 2.04, 0]] },
+    { "n": 6,  "ev": "Круг становится квадратной плиткой и уменьшается", "sfx": [["soft-swipe", 2.56, -3]] },
+    { "n": 7,  "ev": "Карта разворачивается: центр + крест из четырёх плиток", "sfx": [["soft-reorder", 3.08, -2]] },
+    { "n": 8,  "ev": "Углы: ещё четыре плитки разворачиваются от соседей", "sfx": [["soft-reorder", 3.58, -2]] },
+    { "n": 9,  "ev": "Названия поднимаются из-под маски, стеклянные ценники пружинят из нуля", "sfx": [["glass-progress-step", 4.08, -4]] },
+    { "n": 10, "ev": "Сетка перестраивается в бенто, «Вампиризм» — герой 2×2", "sfx": [["glass-snap", 4.68, -2]] },
+    { "n": 11, "ev": "Курсор наводится, плитка-герой приподнимается", "sfx": [["glass-hover", 5.22, -6]] },
+    { "n": 12, "ev": "Клик — зум в плитку, подписи уходят под маску", "sfx": [["mechanical-press", 5.5, 0]] },
+    { "n": 13, "ev": "ДРОП. Зум приземляется; «Вампиризм» стеклянными буквами, по одной", "sfx": [["cinematic-expand", 6.0, -1], ["glass-typing", 6.12, -8], ["glass-typing", 6.32, -8], ["glass-typing", 6.52, -8], ["glass-typing", 6.72, -8]] },
+    { "n": 14, "ev": "Слово дописано: девять стеклянных букв с преломлением и бликом", "sfx": [["glass-typing", 6.92, -8]] },
+    { "n": 15, "ev": "Слово тает в каплю (гу: блюр + порог, стекло поверх остаётся резким)", "sfx": [["glass-collapse", 7.04, -2]] },
+    { "n": 16, "ev": "Капля тянется в стеклянный тулбар, иконки пружинят из нуля", "sfx": [["glass-expand", 7.52, -2]] },
+    { "n": 17, "ev": "Клик по иконке уровня: тулбар становится слайдером, обложка — крупной мозаикой", "sfx": [["mechanical-press", 8.0, 0], ["glass-toggle-on", 8.14, -3]] },
+    { "n": 18, "ev": "Курсор берёт ручку «Обычный»", "sfx": [["glass-drag-start", 8.52, -2]] },
+    { "n": 19, "ev": "Тянем: мозаика мельчает (96 → 40 px), считается из той же картинки", "sfx": [["glass-seek", 8.79, -6], ["glass-seek", 9.07, -6]] },
+    { "n": 20, "ev": "Ещё мельче (24 → 6 px)", "sfx": [["glass-seek", 9.3, -6], ["glass-seek", 9.52, -6], ["glass-seek", 9.74, -6]] },
+    { "n": 21, "ev": "«Улучшенный»: полная детализация, ручка становится стеклянной линзой", "sfx": [["glass-snap", 10.0, 0]] },
+    { "n": 22, "ev": "Линза всплывает в стеклянную сферу", "sfx": [["studio-swipe", 10.52, -3]] },
+    { "n": 23, "ev": "Внутри сферы кругом открывается следующая обложка — «Пламенное лезвие»", "sfx": [["glass-open", 11.04, -2]] },
+    { "n": 24, "ev": "Сфера вырастает в локскрин", "sfx": [["glass-wake", 11.56, -2]] },
+    { "n": 25, "ev": "Стеклянные цифры 21:40 и дата", "sfx": [["glass-progress-step", 12.04, -4]] },
+    { "n": 26, "ev": "Полоска «домой» тянется в стеклянное уведомление Кузнеца", "sfx": [["glass-notification", 12.6, -1]] },
+    { "n": 27, "ev": "Отъезд: появляется телефон, рамка растёт от края экрана", "sfx": [["studio-swipe", 13.04, -3]] },
+    { "n": 28, "ev": "Dynamic Island тянется жидкостью на истончающейся перемычке", "sfx": [["glass-drag-start", 13.54, -3]] },
+    { "n": 29, "ev": "Перемычка рвётся, капля летит по дуге", "sfx": [["glass-send", 14.04, -2]] },
+    { "n": 30, "ev": "Капля раскрывается в чёрную планку окна", "sfx": [["cinematic-expand", 14.52, -4]] },
+    { "n": 31, "ev": "Окно разворачивается шторкой: меню /kuznec, 54 слота, рука и броня", "sfx": [["cinematic-open", 15.02, -3]] },
+    { "n": 32, "ev": "Долгое нажатие: обложка отрывается от обоев", "sfx": [["glass-long-press", 15.52, -2]] },
+    { "n": 33, "ev": "Перетаскивание к слоту 20 (предмет в руке), окно наезжает", "sfx": [["soft-swipe", 16.04, -4]] },
+    { "n": 34, "ev": "Бросок в слот — щелчок", "sfx": [["glass-drop", 16.48, 0]] },
+    { "n": 35, "ev": "Картинка становится шапкой ответа «Улучшения: Меч», слоты уходят", "sfx": [["glass-receive", 17.04, -2]] },
+    { "n": 36, "ev": "Прокрутка: шапка → карточка, рамка и строка цены растут от края картинки", "sfx": [["glass-expand", 17.56, -3]] },
+    { "n": 37, "ev": "Чипы улучшений; клик по «Пламенное лезвие»", "sfx": [["mechanical-press", 18.0, 0]] },
+    { "n": 38, "ev": "Подсветка перекрашивается на выбранный чип", "sfx": [["glass-select", 18.56, -2]] },
+    { "n": 39, "ev": "Оплата: Vault, баланс 128 400 монет — отметка", "sfx": [["mechanical-press", 19.0, -1], ["glass-check", 19.06, -2]] },
+    { "n": 40, "ev": "Кнопка «Меню» перелетает вниз", "sfx": [["soft-swipe", 19.56, -4]] },
+    { "n": 41, "ev": "…и становится «Купить · 32 000 монет»", "sfx": [["studio-snap", 20.06, -2]] },
+    { "n": 42, "ev": "Клик «Купить»", "sfx": [["mechanical-press", 20.5, 0], ["glass-checkout", 20.56, -3]] },
+    { "n": 43, "ev": "Одна чёрная форма: «Списано · 32 000 ✓»", "sfx": [["glass-purchase", 21.06, 0]] },
+    { "n": 44, "ev": "«Куём · %»: счётчик и полоса считаются от t", "sfx": [["glass-progress-step", 21.56, -4], ["glass-progress-step", 21.8, -6]] },
+    { "n": 45, "ev": "«Наносим на предмет»: «+ Пламенное лезвие» едет по линии к мечу", "sfx": [["glass-send", 22.12, -2]] },
+    { "n": 46, "ev": "«Готово ✓» (в плагине — звук ENTITY_PLAYER_LEVELUP)", "sfx": [["arcade-level-up", 22.56, -3]] },
+    { "n": 47, "ev": "Брейк. Круг заливает кадр чёрным за 0,3 с, за углы", "sfx": [["cinematic-close", 23.1, -2]] },
+    { "n": 48, "ev": "Ровно бит чёрного", "sfx": [] },
+    { "n": 49, "ev": "Чёрное сжимается в экран телефона на футаже стола", "sfx": [["cinematic-collapse", 24.2, -4]] },
+    { "n": 50, "ev": "Тот же ирис открывается: «Улучшение Пламенное лезвие куплено за 32 000 монет.»", "sfx": [["glass-unlock", 24.56, -2]] },
+    { "n": 51, "ev": "Ирис закрывается", "sfx": [["glass-lock", 25.12, -3]] },
+    { "n": 52, "ev": "Экран заполняет кадр", "sfx": [["cinematic-expand", 25.62, -4]] },
+    { "n": 53, "ev": "Бит возвращается: кадр сжимается в пилюлю, пилюля — в точку", "sfx": [["glass-collapse", 26.16, -2]] },
+    { "n": 54, "ev": "Буквы выпрыгивают из точки — последний кадр равен первому", "sfx": [["glass-complete", 26.62, -2]] }
+  ]
+}
+</script>
+<div id="ui"><button id="play">▶</button><input id="scrub" type="range" min="0" max="27" step="0.001" value="0"><span id="tc">0.000</span></div>
+
+<script>
+'use strict';
+// ───────────────────────────── time ─────────────────────────────
+// 120 BPM, 54 beats. Everything below is a pure function of t (seconds).
+const BPM = 120, BEAT = 60 / BPM, BEATS = 54, DUR = BEATS * BEAT;
+const B = (n) => (n - 1) * BEAT;                       // start of beat n (1-based)
+const W = 1440, H = 1440, CX = 720, CY = 720;
+
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const lerp = (a, b, u) => a + (b - a) * u;
+const inv = (a, b, x) => clamp((x - a) / (b - a));
+const smooth = (u) => u * u * (3 - 2 * u);
+const eio = (u) => (u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2);   // ease in-out cubic
+const eo = (u) => 1 - Math.pow(1 - u, 3);
+const ei = (u) => u * u * u;
+const eio4 = (u) => (u < 0.5 ? 8 * u ** 4 : 1 - Math.pow(-2 * u + 2, 4) / 2);
+const eoExpo = (u) => (u >= 1 ? 1 : 1 - Math.pow(2, -10 * u));
+const tw = (t, t0, t1, ease = eio) => ease(inv(t0, t1, t));
+const on = (t, a, b) => t >= a && t < b;
+
+// Closed-form step response of a damped spring. period ≈ time of one oscillation.
+function spring(dt, period = 0.42, zeta = 0.62) {
+  if (dt <= 0) return 0;
+  const w = (2 * Math.PI) / period;
+  if (zeta >= 1) return 1 - Math.exp(-w * dt) * (1 + w * dt);
+  const wd = w * Math.sqrt(1 - zeta * zeta);
+  return 1 - Math.exp(-zeta * w * dt) * (Math.cos(wd * dt) + ((zeta * w) / wd) * Math.sin(wd * dt));
+}
+// A value with several targets: one spring per change, summed.
+// keys: [[t, value, period?, zeta?], ...]
+function track(t, v0, keys) {
+  let v = v0, prev = v0;
+  for (const k of keys) { v += (k[1] - prev) * spring(t - k[0], k[2], k[3]); prev = k[1]; }
+  return v;
+}
+// Same, but each change eases over a fixed duration instead of springing: [[t0, t1, value, ease?], ...]
+function path(t, v0, keys) {
+  let v = v0, prev = v0;
+  for (const k of keys) { v += (k[2] - prev) * (k[3] || eio)(inv(k[0], k[1], t)); prev = k[2]; }
+  return v;
+}
+const pop = (t, t0, period = 0.36, zeta = 0.5) => track(t, 0, [[t0, 1, period, zeta]]);   // spring up from zero
+
+// ───────────────────────────── dom helpers ─────────────────────────────
+const stage = document.getElementById('stage');
+const defs = document.querySelector('#defs defs');
+const SVGNS = 'http://www.w3.org/2000/svg';
+function el(tag, cls, parent, css) {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (css) Object.assign(e.style, css);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function svg(tag, attrs, parent) {
+  const e = document.createElementNS(SVGNS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+const px = (v) => `${v.toFixed(3)}px`;
+// Place an element by its box in world units. Children of a visible element use visibility: inherit.
+function box(e, x, y, w, h, extra) {
+  const s = e.style;
+  s.left = px(x); s.top = px(y); s.width = px(Math.max(0, w)); s.height = px(Math.max(0, h));
+  if (extra) Object.assign(s, extra);
+}
+function show(e, v) { e.style.visibility = v ? 'inherit' : 'hidden'; }
+function canvas(w, h, parent, cls = 'abs') {
+  const c = el('canvas', cls, parent);
+  c.width = w; c.height = h;
+  return c;
+}
+function rrPath(ctx, x, y, w, h, r) {
+  r = Math.max(0, Math.min(r, w / 2, h / 2));
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+// object-fit: cover for a square or rectangular source into (x, y, w, h)
+function drawCover(ctx, img, x, y, w, h, zoom = 1, fx = 0.5, fy = 0.5) {
+  const iw = img.naturalWidth || img.videoWidth || img.width, ih = img.naturalHeight || img.videoHeight || img.height;
+  const sc = Math.max(w / iw, h / ih) * zoom;
+  const sw = w / sc, sh = h / sc;
+  ctx.drawImage(img, (iw - sw) * fx, (ih - sh) * fy, sw, sh, x, y, w, h);
+}
+
+// ───────────────────────────── assets ─────────────────────────────
+const UPGRADES = {
+  vampirism: { name: 'Вампиризм', price: 40000, item: 'Меч', lore: 'Шанс восстановить часть здоровья при ударе по врагу.' },
+  flame:     { name: 'Пламенное лезвие', price: 32000, item: 'Меч', lore: 'Шанс поджечь цель при ударе.' },
+  poison:    { name: 'Ядовитый порез', price: 33000, item: 'Меч', lore: 'Шанс отравить цель после удара.' },
+  nighteye:  { name: 'Ночной глаз', price: 18000, item: 'Шлем', lore: 'Ночное зрение, пока шлем надет.' },
+  shield:    { name: 'Магический щит', price: 34000, item: 'Шлем', lore: 'Снижает магический урон.' },
+  laststand: { name: 'Последний рубеж', price: 55000, item: 'Нагрудник', lore: 'Защита, когда здоровья мало.' },
+  wind:      { name: 'Шаг ветра', price: 28000, item: 'Поножи', lore: 'Скорость передвижения.' },
+  feather:   { name: 'Пероход', price: 18000, item: 'Ботинки', lore: 'Меньше урона от падения.' },
+  rabbit:    { name: 'Кроличий прыжок', price: 21000, item: 'Ботинки', lore: 'Прыжки выше.' },
+};
+const money = (n) => n.toLocaleString('ru-RU').replace(/ /g, ' ');
+const IMG = {};
+function loadImage(name, src) {
+  return new Promise((res, rej) => { const i = new Image(); i.onload = () => { IMG[name] = i; res(i); }; i.onerror = rej; i.src = src; });
+}
+
+// ───────────────────────────── camera + cursor ─────────────────────────────
+// World → screen: screen = (p - cam) * s + centre.
+function camTransform(world, cam) {
+  world.style.transform = `translate(${(CX - cam.x * cam.s).toFixed(3)}px, ${(CY - cam.y * cam.s).toFixed(3)}px) scale(${cam.s.toFixed(5)})`;
+}
+const toScreen = (cam, x, y) => [(x - cam.x) * cam.s + CX, (y - cam.y) * cam.s + CY];
+
+const cursorEl = (() => {
+  const s = svg('svg', { id: 'cursor', viewBox: '0 0 32 32' });
+  // macOS-style arrow: black body, white keyline. Tip at (6, 3).
+  svg('path', { d: 'M6 3 L6 25.5 L11.6 20.4 L15.4 29 L19.6 27.2 L15.8 18.8 L23.4 18.6 Z', fill: '#0b0b0c', stroke: '#fff', 'stroke-width': '2', 'stroke-linejoin': 'round' }, s);
+  stage.appendChild(s);
+  return s;
+})();
+// c = { x, y (screen px), size (px), press 0..1, visible }
+function drawCursor(c) {
+  if (!c || !c.visible) { cursorEl.style.visibility = 'hidden'; return; }
+  cursorEl.style.visibility = 'visible';
+  const k = c.size / 32 * (1 - 0.16 * clamp(c.press || 0, 0, 1.5));
+  // keep the tip anchored while scaling
+  cursorEl.style.transform = `translate(${(c.x - 6 * k).toFixed(2)}px, ${(c.y - 3 * k).toFixed(2)}px) scale(${k.toFixed(4)})`;
+}
+// press envelope for a click at t0: down fast, release with a spring
+const press = (t, t0, hold = 0.07) => (t < t0 ? 0 : t < t0 + hold ? eo(inv(t0, t0 + 0.05, t)) : 1 - spring(t - t0 - hold, 0.22, 0.6));
+// cursor position along keyed moves: keys [[t0, t1, x, y], ...] from (x0, y0)
+function cursorPath(t, x0, y0, keys) {
+  return [path(t, x0, keys.map((k) => [k[0], k[1], k[2], k[4]])), path(t, y0, keys.map((k) => [k[0], k[1], k[3], k[4]]))];
+}
+
+// ───────────────────────────── acts ─────────────────────────────
+const ACTS = [];
+function act(name, t0, t1) {
+  const root = el('div', 'act', stage);
+  root.dataset.act = name;
+  const a = { name, t0, t1, root, update: null };
+  ACTS.push(a);
+  return a;
+}
+</script>
+
+<script>
+'use strict';
+// ═════════════════════════════ LIQUID GLASS ═════════════════════════════
+// Every glass element holds its own clone of the scene behind it (a canvas we redraw each
+// frame from the same sources), filtered by an SVG feImage displacement map run through three
+// feDisplacementMaps at slightly different scales (R, G, B → chromatic edges), plus a rim light.
+
+const mapCache = new Map();
+// Rounded-rect distance field → displacement map. Margin m stays neutral (128, 128).
+// Near the edge the vector points outward, so the rim samples the scene just outside it.
+function rrMapURL(w, h, r, bevel, m) {
+  w = Math.max(2, Math.round(w)); h = Math.max(2, Math.round(h)); r = Math.round(Math.min(r, w / 2, h / 2));
+  bevel = Math.max(1, Math.round(bevel)); m = Math.round(m);
+  const key = `${w}|${h}|${r}|${bevel}|${m}`;
+  if (mapCache.has(key)) return mapCache.get(key);
+  const cw = w + 2 * m, ch = h + 2 * m;
+  const c = document.createElement('canvas'); c.width = cw; c.height = ch;
+  const g = c.getContext('2d');
+  const img = g.createImageData(cw, ch), d = img.data;
+  const hx = w / 2 - r, hy = h / 2 - r;
+  for (let j = 0; j < ch; j++) {
+    const py = j + 0.5 - m - h / 2, ay = Math.abs(py), qy = ay - hy;
+    for (let i = 0; i < cw; i++) {
+      const px_ = i + 0.5 - m - w / 2, ax = Math.abs(px_), qx = ax - hx;
+      let sd, nx, ny;
+      if (qx > 0 && qy > 0) { const L = Math.hypot(qx, qy); sd = L - r; nx = qx / L; ny = qy / L; }
+      else { sd = Math.max(qx, qy) - r; if (qx > qy) { nx = 1; ny = 0; } else { nx = 0; ny = 1; } }
+      nx *= Math.sign(px_) || 1; ny *= Math.sign(py) || 1;
+      const o = (j * cw + i) * 4;
+      let vx = 0, vy = 0;
+      if (sd < 0) {
+        const u = clamp(-sd / bevel);
+        const mag = Math.pow(1 - u, 2.2);
+        vx = nx * mag; vy = ny * mag;
+      }
+      d[o] = 128 + 127 * vx; d[o + 1] = 128 + 127 * vy; d[o + 2] = 128; d[o + 3] = 255;
+    }
+  }
+  g.putImageData(img, 0, 0);
+  const url = c.toDataURL();
+  mapCache.set(key, url);
+  return url;
+}
+
+let glassSeq = 0;
+function makeDisplaceFilter(id) {
+  const f = svg('filter', { id, x: 0, y: 0, width: 10, height: 10, filterUnits: 'userSpaceOnUse', primitiveUnits: 'userSpaceOnUse', 'color-interpolation-filters': 'sRGB' }, defs);
+  const im = svg('feImage', { x: 0, y: 0, width: 10, height: 10, preserveAspectRatio: 'none', result: 'map' }, f);
+  const dm = [0, 1, 2].map((i) => svg('feDisplacementMap', { in: 'SourceGraphic', in2: 'map', scale: 0, xChannelSelector: 'R', yChannelSelector: 'G', result: `d${i}` }, f));
+  const ch = ['1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0', '0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0', '0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0'];
+  ch.forEach((v, i) => svg('feColorMatrix', { in: `d${i}`, type: 'matrix', values: v, result: `c${i}` }, f));
+  svg('feComposite', { in: 'c0', in2: 'c1', operator: 'arithmetic', k1: 0, k2: 1, k3: 1, k4: 0, result: 'rg' }, f);
+  svg('feComposite', { in: 'rg', in2: 'c2', operator: 'arithmetic', k1: 0, k2: 1, k3: 1, k4: 0 }, f);
+  const state = { href: '', w: 0, h: 0, s: -1 };
+  return {
+    id, f, im, dm,
+    set(href, w, h, scale, spread = 0.07) {
+      if (state.w !== w || state.h !== h) {
+        for (const e of [f, im]) { e.setAttribute('width', w); e.setAttribute('height', h); }
+        state.w = w; state.h = h;
+      }
+      if (href !== state.href) { im.setAttribute('href', href); state.href = href; }
+      if (scale !== state.s) { dm.forEach((e, i) => e.setAttribute('scale', (scale * (1 + spread * i)).toFixed(2))); state.s = scale; }
+    },
+  };
+}
+
+// A rounded-rect glass panel. draw(ctx, ox, oy) paints the scene behind it, where (ox, oy)
+// is the clone canvas origin in the same coordinates the panel is placed in.
+function Glass(parent, opts = {}) {
+  const id = `g${++glassSeq}`;
+  const root = el('div', 'abs', parent, { overflow: 'hidden' });
+  const clone = canvas(4, 4, root);
+  const filter = makeDisplaceFilter(id);
+  clone.style.filter = `url(#${id})`;
+  const tint = el('div', 'abs', root, { inset: '0', width: '100%', height: '100%' });
+  const rim = el('div', 'abs', root, { inset: '0', width: '100%', height: '100%', borderRadius: 'inherit' });
+  const content = el('div', 'abs', root, { inset: '0', width: '100%', height: '100%' });
+  return { id, root, clone, filter, tint, rim, content, opts };
+}
+// q: clone resolution factor (raise it when the camera magnifies the glass)
+function updateGlass(gl, { x, y, w, h, r, bevel, scale, draw, q = 1, tint = 0.1, rimA = 1, shadow = 0.16, transform = '' }) {
+  w = Math.max(1, w); h = Math.max(1, h);
+  r = Math.min(r, w / 2, h / 2);
+  const m = Math.ceil(Math.abs(scale) * 0.6 + 4);
+  box(gl.root, x, y, w, h, { borderRadius: px(r), transform,
+    boxShadow: shadow > 0 ? `0 ${px(h * 0.06 + 6)} ${px(h * 0.22 + 14)} rgba(0,0,0,${shadow})` : 'none' });
+  const cw = Math.ceil((w + 2 * m) * q), ch = Math.ceil((h + 2 * m) * q);
+  if (gl.clone.width !== cw || gl.clone.height !== ch) { gl.clone.width = cw; gl.clone.height = ch; }
+  box(gl.clone, -m, -m, w + 2 * m, h + 2 * m);
+  const ctx = gl.clone.getContext('2d');
+  ctx.setTransform(q, 0, 0, q, 0, 0);
+  ctx.clearRect(0, 0, w + 2 * m, h + 2 * m);
+  ctx.save(); ctx.translate(m, m); draw(ctx, x, y, w, h); ctx.restore();
+  const url = rrMapURL(w, h, r, bevel, m);
+  gl.filter.set(url, Math.round(w) + 2 * m, Math.round(h) + 2 * m, scale);
+  gl.tint.style.background = `rgba(255,255,255,${tint})`;
+  // rim light: bright top-left keyline, softer bottom-right, faint inner bloom of the edge
+  const a = rimA;
+  gl.rim.style.boxShadow = [
+    `inset ${px(1.6)} ${px(1.8)} ${px(1)} rgba(255,255,255,${0.75 * a})`,
+    `inset ${px(-1.2)} ${px(-1.4)} ${px(1)} rgba(255,255,255,${0.38 * a})`,
+    `inset 0 0 ${px(Math.min(w, h) * 0.12 + 4)} rgba(255,255,255,${0.16 * a})`,
+  ].join(',');
+}
+
+// Price chip on a tile: glass over the tile's own cover.
+const chipMeasure = document.createElement('canvas').getContext('2d');
+function glassChip(parent, key, text) {
+  const gl = Glass(parent);
+  const label = el('div', 'abs nowrap', gl.content, { font: '600 21px Geist', color: '#fff', lineHeight: '42px', letterSpacing: '-0.1px',
+    textShadow: '0 1px 2px rgba(0,0,0,.18)' });
+  label.textContent = text;
+  gl.text = text;
+  return gl;
+}
+function updateGlassChip(gl, tw_, th_, s, img) {
+  chipMeasure.font = '600 21px Geist';
+  const w = Math.ceil(chipMeasure.measureText(gl.text).width) + 32, h = 42;
+  const x = tw_ - 16 - w, y = 16;
+  show(gl.root, s > 0.002);
+  updateGlass(gl, {
+    x, y, w, h, r: h / 2, bevel: 14, scale: 26,
+    transform: `scale(${Math.max(1e-3, s).toFixed(4)})`, tint: 0.14, shadow: 0.12,
+    draw: (ctx, gx, gy) => drawCover(ctx, img, -gx, -gy, tw_, th_),
+  });
+  gl.root.style.transformOrigin = '50% 50%';
+  box(gl.content.firstChild, 16, 0, w - 32, h);
+}
+
+// ─────────── glass letters: a canvas distance field per glyph → map, mask, highlights ───────────
+// Exact squared Euclidean distance transform (Felzenszwalb & Huttenlocher), 1D pass.
+function edt1d(f, n, d, v, z) {
+  let k = 0; v[0] = 0; z[0] = -Infinity; z[1] = Infinity;
+  for (let q = 1; q < n; q++) {
+    let s = ((f[q] + q * q) - (f[v[k]] + v[k] * v[k])) / (2 * q - 2 * v[k]);
+    while (s <= z[k]) { k--; s = ((f[q] + q * q) - (f[v[k]] + v[k] * v[k])) / (2 * q - 2 * v[k]); }
+    k++; v[k] = q; z[k] = s; z[k + 1] = Infinity;
+  }
+  k = 0;
+  for (let q = 0; q < n; q++) { while (z[k + 1] < q) k++; d[q] = (q - v[k]) * (q - v[k]) + f[v[k]]; }
+}
+function edt(inside, w, h) {
+  const INF = 1e20, out = new Float32Array(w * h), n = Math.max(w, h);
+  const f = new Float64Array(n), d = new Float64Array(n), v = new Int32Array(n), z = new Float64Array(n + 1);
+  for (let i = 0; i < w * h; i++) out[i] = inside[i] ? INF : 0;
+  for (let x = 0; x < w; x++) { for (let y = 0; y < h; y++) f[y] = out[y * w + x]; edt1d(f, h, d, v, z); for (let y = 0; y < h; y++) out[y * w + x] = d[y]; }
+  for (let y = 0; y < h; y++) { for (let x = 0; x < w; x++) f[x] = out[y * w + x]; edt1d(f, w, d, v, z); for (let x = 0; x < w; x++) out[y * w + x] = Math.sqrt(d[x]); }
+  return out;
+}
+const glyphCache = new Map();
+// Returns canvases/URLs for one glyph: displacement map, alpha mask and highlight layer.
+function glassGlyph(ch, font, bevel, pad) {
+  const key = `${ch}|${font}|${bevel}|${pad}`;
+  if (glyphCache.has(key)) return glyphCache.get(key);
+  const mc = document.createElement('canvas').getContext('2d');
+  mc.font = font;
+  const m = mc.measureText(ch);
+  const asc = Math.ceil(m.actualBoundingBoxAscent), desc = Math.ceil(m.actualBoundingBoxDescent);
+  const left = Math.ceil(m.actualBoundingBoxLeft), right = Math.ceil(m.actualBoundingBoxRight);
+  const w = left + right + 2 * pad, h = asc + desc + 2 * pad;
+  const c = document.createElement('canvas'); c.width = w; c.height = h;
+  const g = c.getContext('2d');
+  g.font = font; g.fillStyle = '#fff'; g.fillText(ch, pad + left, pad + asc);
+  const a = g.getImageData(0, 0, w, h).data;
+  const alpha = new Float32Array(w * h), inside = new Uint8Array(w * h);
+  for (let i = 0; i < w * h; i++) { alpha[i] = a[i * 4 + 3] / 255; inside[i] = alpha[i] > 0.5 ? 1 : 0; }
+  const dist = edt(inside, w, h);
+  // soften the field a little so normals are smooth on curves
+  const sd = new Float32Array(w * h);
+  for (let y = 1; y < h - 1; y++) for (let x = 1; x < w - 1; x++) {
+    let s = 0; for (let j = -1; j <= 1; j++) for (let i = -1; i <= 1; i++) s += dist[(y + j) * w + x + i];
+    sd[y * w + x] = s / 9;
+  }
+  const map = g.createImageData(w, h), hi = g.createImageData(w, h), mk = g.createImageData(w, h);
+  const L = [-0.62, -0.78];
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    const i = y * w + x, o = i * 4;
+    let vx = 0, vy = 0, spec = 0, back = 0;
+    if (alpha[i] > 0 && x > 0 && y > 0 && x < w - 1 && y < h - 1) {
+      const gx = sd[i + 1] - sd[i - 1], gy = sd[i + w] - sd[i - w];
+      const gl = Math.hypot(gx, gy) || 1;
+      const nx = -gx / gl, ny = -gy / gl;                     // outward normal
+      const u = clamp(dist[i] / bevel);
+      const mag = Math.pow(1 - u, 2);
+      vx = nx * mag; vy = ny * mag;
+      const lam = nx * L[0] + ny * L[1];
+      spec = Math.pow(Math.max(0, lam), 1.6) * Math.pow(1 - u, 3);
+      back = Math.pow(Math.max(0, -lam), 2) * Math.pow(1 - u, 4);
+    }
+    map.data[o] = 128 + 127 * vx; map.data[o + 1] = 128 + 127 * vy; map.data[o + 2] = 128; map.data[o + 3] = 255;
+    const A = alpha[i];
+    hi.data[o] = hi.data[o + 1] = hi.data[o + 2] = 255;
+    hi.data[o + 3] = 255 * A * clamp(0.16 + 1.0 * spec + 0.5 * back);
+    mk.data[o] = mk.data[o + 1] = mk.data[o + 2] = 255; mk.data[o + 3] = 255 * A;
+  }
+  const toURL = (id) => { g.clearRect(0, 0, w, h); g.putImageData(id, 0, 0); return c.toDataURL(); };
+  const res = { w, h, asc, left, pad, mapURL: toURL(map), hiURL: toURL(hi), maskURL: toURL(mk), adv: m.width };
+  glyphCache.set(key, res);
+  return res;
+}
+// One glass letter element (clone + filter + mask + highlight)
+function GlassLetter(parent, ch, font, bevel = 22, pad = 40) {
+  const G = glassGlyph(ch, font, bevel, pad);
+  const id = `gl${++glassSeq}`;
+  const root = el('div', 'abs', parent, { width: px(G.w), height: px(G.h) });
+  const shadowEl = el('div', 'abs', root, { width: px(G.w), height: px(G.h), background: 'rgba(0,0,0,.22)',
+    WebkitMaskImage: `url(${G.maskURL})`, maskImage: `url(${G.maskURL})`, WebkitMaskSize: '100% 100%', maskSize: '100% 100%' });
+  const clone = canvas(G.w, G.h, root);
+  const filter = makeDisplaceFilter(id);
+  Object.assign(clone.style, { filter: `url(#${id})`, WebkitMaskImage: `url(${G.maskURL})`, maskImage: `url(${G.maskURL})`, WebkitMaskSize: '100% 100%', maskSize: '100% 100%' });
+  const hi = el('img', 'abs', root, { width: px(G.w), height: px(G.h) });
+  hi.src = G.hiURL;
+  filter.set(G.mapURL, G.w, G.h, 0);
+  return { ch, G, root, clone, filter, hi, shadowEl };
+}
+// place a glass letter: pen position (x, baseline y), scale s (about the glyph centre), refraction strength
+function updateGlassLetter(L, x, y, s, scale, draw, extra = {}) {
+  const G = L.G;
+  const ox = x - G.pad - G.left, oy = y - G.pad - G.asc;
+  show(L.root, s > 0.002);
+  L.root.style.transformOrigin = '50% 60%';
+  L.root.style.transform = `translate(${px(ox)}, ${px(oy)}) scale(${Math.max(1e-3, s).toFixed(4)})`;
+  L.shadowEl.style.transform = `translate(${px(3)}, ${px(10)})`;
+  L.shadowEl.style.filter = 'blur(10px)';
+  L.filter.set(G.mapURL, G.w, G.h, scale);
+  const ctx = L.clone.getContext('2d');
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.clearRect(0, 0, G.w, G.h);
+  draw(ctx, ox, oy, G.w, G.h);
+  if (extra.opacityHi !== undefined) L.hi.style.opacity = extra.opacityHi;
+}
+
+// ─────────── goo: blur + alpha threshold, then the source composited on top ───────────
+function makeGoo(id) {
+  const f = svg('filter', { id, x: '-20%', y: '-20%', width: '140%', height: '140%', 'color-interpolation-filters': 'sRGB' }, defs);
+  const blur = svg('feGaussianBlur', { in: 'SourceGraphic', stdDeviation: 12, result: 'b' }, f);
+  svg('feColorMatrix', { in: 'b', type: 'matrix', values: '1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 26 -11', result: 'goo' }, f);
+  svg('feComposite', { in: 'SourceGraphic', in2: 'goo', operator: 'atop' }, f);
+  return { id, f, blur, set(sd) { blur.setAttribute('stdDeviation', sd.toFixed(2)); } };
+}
+</script>
+
+<script>
+'use strict';
+// ═════════════════════════════ OPEN ═════════════════════════════
+// Wordmark → dot → pill "/kuznec" → iris → first cover → grid → bento → zoom (lands on the drop).
+const OPEN = act('open', 0, B(13));
+OPEN.also = (t) => t >= B(53);
+const BRAND = 'Kuznec';
+const WM = { size: 236, wght: 800 };
+const GRID = { tile: 300, gap: 18 };
+const CELL = GRID.tile + GRID.gap;
+// 3×3 map layout (col, row from −1..1) and bento layout (4×3, hero 2×2)
+const TILES = [
+  { key: 'vampirism', g: [0, 0],   b: [1, 0, 2, 2], order: 0 },
+  { key: 'flame',     g: [0, -1],  b: [0, 0, 1, 1], order: 1, from: 'C', axis: 'y' },
+  { key: 'shield',    g: [1, 0],   b: [3, 1, 1, 1], order: 2, from: 'C', axis: 'x' },
+  { key: 'laststand', g: [0, 1],   b: [1, 2, 1, 1], order: 3, from: 'C', axis: 'y' },
+  { key: 'nighteye',  g: [-1, 0],  b: [0, 1, 1, 1], order: 4, from: 'C', axis: 'x' },
+  { key: 'poison',    g: [1, -1],  b: [3, 0, 1, 1], order: 5, from: 'N', axis: 'x' },
+  { key: 'wind',      g: [-1, -1], b: [2, 2, 1, 1], order: 6, from: 'N', axis: 'x' },
+  { key: 'rabbit',    g: [1, 1],   b: [3, 2, 1, 1], order: 7, from: 'S', axis: 'x' },
+  { key: 'feather',   g: [-1, 1],  b: [0, 2, 1, 1], order: 8, from: 'S', axis: 'x' },
+];
+const BENTO = { x0: CX - (4 * CELL - GRID.gap) / 2, y0: CY - (3 * CELL - GRID.gap) / 2 };
+const benteRect = (b) => [BENTO.x0 + b[0] * CELL, BENTO.y0 + b[1] * CELL, b[2] * CELL - GRID.gap, b[3] * CELL - GRID.gap];
+const HERO = benteRect(TILES[0].b);
+
+const openWorld = el('div', 'world', OPEN.root);
+// wordmark letters
+const wmWrap = el('div', 'abs', openWorld);
+const wmLetters = [...BRAND].map((ch) => el('div', 'abs nowrap', wmWrap, {
+  font: `${WM.wght} ${WM.size}px Archivo`, lineHeight: '1', letterSpacing: '0', transformOrigin: '0 0',
+}));
+wmLetters.forEach((e, i) => (e.textContent = BRAND[i]));
+const wmDot = el('div', 'abs', openWorld, { background: 'var(--ink)', overflow: 'hidden' });
+const pillLabelMask = el('div', 'mask', wmDot, { inset: '0', borderRadius: 'inherit' });
+const pillLabel = el('div', 'abs nowrap', pillLabelMask, { font: '600 56px Geist', color: '#fff', letterSpacing: '-0.5px', lineHeight: '1' });
+pillLabel.textContent = '/kuznec';
+const irisCanvas = canvas(720, 720, wmDot, 'abs');
+irisCanvas.style.width = '100%'; irisCanvas.style.height = '100%';
+
+// tiles
+const tileEls = TILES.map((tile) => {
+  const u = UPGRADES[tile.key];
+  const root = el('div', 'abs', openWorld, { overflow: 'hidden', background: '#ddd' });
+  const img = el('img', 'abs', root, { width: '100%', height: '100%', objectFit: 'cover' });
+  img.src = `assets/covers/${tile.key}.jpg`;
+  const nameMask = el('div', 'mask', root, { left: '20px', bottom: '22px', height: '34px', right: '20px' });
+  const name = el('div', 'abs nowrap', nameMask, { font: '650 27px Geist', color: '#fff', letterSpacing: '-0.3px', lineHeight: '34px',
+    textShadow: '0 1px 2px rgba(0,0,0,.35), 0 2px 12px rgba(0,0,0,.28)' });
+  name.textContent = u.name;
+  const chip = glassChip(root, tile.key, `${money(u.price)} монет`);
+  return { tile, root, img, nameMask, name, chip };
+});
+
+// Measure letter widths across the wdth axis once (DOM, so the variable axis is honoured).
+const WDTH = [62, 70, 80, 90, 100, 110, 125];
+let wmMetrics = null;
+function measureWordmark() {
+  const probe = el('span', 'nowrap', stage, { position: 'absolute', visibility: 'hidden', font: `${WM.wght} ${WM.size}px Archivo`, lineHeight: '1' });
+  const widths = [...BRAND].map((ch) => WDTH.map((wd) => {
+    probe.style.fontVariationSettings = `'wdth' ${wd}`;
+    probe.textContent = ch;
+    return probe.getBoundingClientRect().width;
+  }));
+  probe.style.fontVariationSettings = `'wdth' 125`;
+  probe.textContent = '.';
+  const dotAdvance = probe.getBoundingClientRect().width;
+  probe.remove();
+  // ink box of the period and cap height from canvas metrics (fontStretch 'expanded' = 125%)
+  const c = document.createElement('canvas').getContext('2d');
+  c.font = `${WM.wght} ${WM.size}px Archivo`;
+  c.fontStretch = 'expanded';
+  const m = c.measureText('.');
+  const capM = c.measureText('K');
+  const fullW = widths.reduce((s, w) => s + w[WDTH.length - 1], 0);
+  wmMetrics = {
+    widths, dotAdvance, fullW,
+    dot: { l: -m.actualBoundingBoxLeft, r: m.actualBoundingBoxRight, t: m.actualBoundingBoxAscent, b: m.actualBoundingBoxDescent },
+    cap: capM.actualBoundingBoxAscent,
+    asc: m.fontBoundingBoxAscent, desc: m.fontBoundingBoxDescent,
+  };
+}
+// wdth value whose advance equals frac × the 125 advance (frac ≥ min ratio)
+function wdthFor(i, frac) {
+  const ws = wmMetrics.widths[i], w125 = ws[ws.length - 1];
+  const target = frac * w125;
+  if (target <= ws[0]) return [62, target / ws[0]];
+  for (let j = 1; j < ws.length; j++) {
+    if (target <= ws[j]) { const u = (target - ws[j - 1]) / (ws[j] - ws[j - 1]); return [lerp(WDTH[j - 1], WDTH[j], u), 1]; }
+  }
+  return [125, 1];
+}
+// Accordion factor: 1 = full wordmark, 0 = letters gone into the dot.
+function wordmarkK(t) {
+  if (t < B(2)) return 1 - eio4(inv(0.016, 0.44, t));
+  if (t >= B(54)) {
+    const s = spring(t - B(54), 0.4, 0.55);
+    return lerp(s, 1, smooth(inv(DUR - 0.14, DUR, t)));
+  }
+  return 0;
+}
+// Layout of the wordmark at factor k: letters move toward the dot by the same factor,
+// each drawn k × its full width (wdth axis first, then a scaleX for the remainder).
+function layoutWordmark(k) {
+  const M = wmMetrics;
+  const dotW = M.dot.r - M.dot.l, dotH = M.dot.t + M.dot.b;
+  const total = k * M.fullW + dotW;
+  const left = CX - total / 2;
+  const baseline = CY + M.cap / 2;
+  let x = left;
+  wmLetters.forEach((e, i) => {
+    const w125 = M.widths[i][WDTH.length - 1];
+    const [wd, sx] = wdthFor(i, Math.max(k, 1e-4));
+    const visible = k > 0.002;
+    show(e, visible);
+    e.style.fontVariationSettings = `'wdth' ${wd.toFixed(2)}`;
+    e.style.transform = `translate(${px(x)}, ${px(baseline - M.asc)}) scaleX(${sx.toFixed(5)})`;
+    x += k * w125;
+  });
+  // the dot sits at its ink box right after the letters
+  return { x: x, y: baseline - M.dot.t, w: dotW, h: dotH };
+}
+
+// Iris: 6 blades around a hexagonal aperture. Each blade is the minor circular segment
+// cut off by the line through one hexagon edge: its two vertices, both edge extensions
+// out to the rim, and the SHORT arc between them.
+function drawIris(ctx, cx, cy, R, a, rot, fills = ['#2b2b30', '#323237'], edge = '#5b5b62', lw = 2.5) {
+  for (let i = 0; i < 6; i++) {
+    const th = rot + (i * Math.PI) / 3;
+    const p = [cx + a * Math.cos(th), cy + a * Math.sin(th)];
+    const q = [cx + a * Math.cos(th + Math.PI / 3), cy + a * Math.sin(th + Math.PI / 3)];
+    // edge direction p → q, taken from the angle so it stays defined when the aperture closes
+    const dx = Math.cos(th + (2 * Math.PI) / 3), dy = Math.sin(th + (2 * Math.PI) / 3);
+    // line p + s·d meets the rim circle at s = −(m·d) ± sqrt(R² − |m|² + (m·d)²), m = p − c
+    const mx = p[0] - cx, my = p[1] - cy, md = mx * dx + my * dy;
+    const disc = Math.sqrt(Math.max(0, R * R - (mx * mx + my * my) + md * md));
+    const e1 = [p[0] + (-md + disc) * dx, p[1] + (-md + disc) * dy];   // extension beyond q
+    const e0 = [p[0] + (-md - disc) * dx, p[1] + (-md - disc) * dy];   // extension behind p
+    const a1 = Math.atan2(e1[1] - cy, e1[0] - cx), a0 = Math.atan2(e0[1] - cy, e0[0] - cx);
+    // the SHORT arc from e1 back to e0 (the side away from the aperture)
+    let sweep = a0 - a1;
+    while (sweep <= -Math.PI) sweep += 2 * Math.PI;
+    while (sweep > Math.PI) sweep -= 2 * Math.PI;
+    if (a < 0.5) sweep = -Math.PI;                                   // closed: each blade is a half disc
+    ctx.beginPath();
+    ctx.moveTo(e0[0], e0[1]);
+    ctx.lineTo(p[0], p[1]);
+    ctx.lineTo(q[0], q[1]);
+    ctx.lineTo(e1[0], e1[1]);
+    ctx.arc(cx, cy, R, a1, a1 + sweep, sweep < 0);
+    ctx.closePath();
+    ctx.fillStyle = fills[i % fills.length]; ctx.fill();
+    // seam along the blade's leading edge
+    ctx.beginPath(); ctx.moveTo(p[0], p[1]); ctx.lineTo(e1[0], e1[1]);
+    ctx.strokeStyle = edge; ctx.lineWidth = lw; ctx.stroke();
+  }
+}
+
+// Positions of the 3×3 map
+const gridRect = (g) => [CX + g[0] * CELL - GRID.tile / 2, CY + g[1] * CELL - GRID.tile / 2, GRID.tile, GRID.tile];
+
+OPEN.update = (t) => {
+  // camera: still until the click on the hero, then zoom to land on the drop at B(13)
+  const z = t >= B(53) ? 0 : tw(t, B(12) + 0.04, B(13), eio4);
+  const heroCx = HERO[0] + HERO[2] / 2, heroCy = HERO[1] + HERO[3] / 2;
+  const cam = { x: lerp(CX, heroCx, z), y: lerp(CY, heroCy, z), s: 1 / lerp(1, HERO[2] / W, z) };
+  // ^ scale interpolated in "visible width" so the push feels linear on screen
+  camTransform(openWorld, cam);
+
+  // ── wordmark / dot / pill / iris ──
+  const k = wordmarkK(t);
+  const dot = layoutWordmark(k);
+  const endPhase = t >= B(53);                      // the ending reuses pill → dot → letters
+  let bx = dot.x, by = dot.y, bw = dot.w, bh = dot.h, br = 3;
+  let label = 0, irisA = 0, irisRot = 0, irisOn = false, coverIn = false;
+  const PILL = { w: 430, h: 134 };
+  if (!endPhase) {
+    // beat 2: dot expands into the pill
+    const p = track(t, 0, [[B(2), 1, 0.46, 0.72]]);
+    bw = lerp(dot.w, PILL.w, p); bh = lerp(dot.h, PILL.h, p);
+    bx = lerp(dot.x, CX - PILL.w / 2, p); by = lerp(dot.y, CY - PILL.h / 2, p);
+    br = lerp(3, PILL.h / 2, clamp(p * 1.4));
+    // beat 3: label rises inside the pill
+    label = track(t, 0, [[B(3), 1, 0.4, 0.78]]);
+    // beat 4: click → pill becomes a circle while the blades close over the label
+    const c = track(t, 0, [[B(4) + 0.04, 1, 0.42, 0.7]]);
+    const d1 = 300, d2 = 600;
+    // beat 5: snap open onto the first cover, circle grows
+    const g = track(t, 0, [[B(5), 1, 0.5, 0.62]]);
+    const D = lerp(d1, d2, g);
+    bw = lerp(bw, D, c); bh = lerp(bh, D, c);
+    br = lerp(br, D / 2, c);
+    bx = lerp(bx, CX - D / 2, c); by = lerp(by, CY - D / 2, c);
+    irisOn = t >= B(4) + 0.02 && t < B(5) + 0.4;
+    irisA = t < B(5) ? lerp(1, 0, tw(t, B(4) + 0.04, B(4) + 0.36, eio)) : tw(t, B(5) - 0.0, B(5) + 0.26, eo);
+    irisRot = (t < B(5) ? lerp(0, 0.95, tw(t, B(4) + 0.04, B(4) + 0.36, eio)) : 0.95 + 0.9 * tw(t, B(5), B(5) + 0.26, eo));
+    coverIn = t >= B(5);
+  } else {
+    // ending: black screen contracts into the pill, then the dot; letters spring out on the last beat
+    const p = 1 - track(t, 0, [[B(53) + 0.2, 1, 0.42, 0.85]]);       // pill → dot
+    bw = lerp(dot.w, PILL.w, p); bh = lerp(dot.h, PILL.h, p);
+    bx = lerp(dot.x, CX - PILL.w / 2, p); by = lerp(dot.y, CY - PILL.h / 2, p);
+    br = lerp(3, PILL.h / 2, clamp(p * 1.4));
+    const f = 1 - tw(t, B(53), B(53) + 0.24, eio);                     // full frame → pill
+    bx = lerp(bx, 0, f); by = lerp(by, 0, f); bw = lerp(bw, W, f); bh = lerp(bh, H, f); br = lerp(br, 0, f);
+    // the camera is reset to identity in the ending
+  }
+
+  // the dot element is the shape: dot → pill → circle → tile (the tile is drawn by the hero tile itself)
+  const tileStart = B(6);
+  const showDot = t < tileStart || endPhase;
+  show(wmDot, showDot);
+  box(wmDot, bx, by, bw, bh, { borderRadius: px(br) });
+  // label sits centred; it rises from behind the pill's own edge
+  const lw = 216;
+  box(pillLabel, bw / 2 - lw / 2, bh / 2 - 28 + (1 - label) * 90, lw, 56);
+  show(pillLabelMask, !coverIn && !endPhase);
+  // iris canvas covers the shape; blades in canvas pixels (720 = shape size)
+  show(irisCanvas, irisOn || coverIn);
+  if (irisOn || coverIn) {
+    const ctx = irisCanvas.getContext('2d');
+    ctx.clearRect(0, 0, 720, 720);
+    if (coverIn) drawCover(ctx, IMG.vampirism, 0, 0, 720, 720);
+    const R = 360 * Math.SQRT2 + 4;
+    const amax = R * 1.02;
+    if (irisOn && irisA < 0.999) drawIris(ctx, 360, 360, R, irisA * amax, irisRot);
+  }
+
+  // ── tiles ──
+  const hero = tileEls[0];
+  tileEls.forEach((T, i) => {
+    const tile = T.tile;
+    let [x, y, w, h] = gridRect(tile.g);
+    let r = 36, sx = 1, sy = 1, ox = 0, oy = 0, vis = t >= tileStart && !endPhase;
+    if (i === 0) {
+      // hero: grows out of the circle at beat 6 (circle → square tile and shrinks)
+      const q = track(t, 0, [[tileStart, 1, 0.5, 0.74]]);
+      const D = 600;
+      w = h = lerp(D, GRID.tile, q);
+      x = CX - w / 2; y = CY - h / 2;
+      r = lerp(D / 2, 36, clamp(q * 1.15));
+    } else {
+      // unfold like a paper map from the shared edge: plus at beat 7, corners at beat 8
+      const t0 = tile.from === 'C' ? B(7) + (tile.order - 1) * 0.055 : B(8) + (tile.order - 5) * 0.055;
+      const u = track(t, 0, [[t0, 1, 0.5, 0.8]]);
+      vis = vis && t >= t0;
+      if (tile.axis === 'y') { sy = u; oy = tile.g[1] < 0 ? h : 0; }
+      else { sx = u; ox = tile.g[0] < 0 ? w : 0; }
+    }
+    // beat 10: rearrange into the bento
+    const bq = track(t, 0, [[B(10) + tile.order * 0.03, 1, 0.55, 0.72]]);
+    const [bxr, byr, bwr, bhr] = benteRect(tile.b);
+    x = lerp(x, bxr, bq); y = lerp(y, byr, bq); w = lerp(w, bwr, bq); h = lerp(h, bhr, bq);
+    // beat 11: hover lift on the hero; beat 12: press; the zoom then flattens its corners
+    if (i === 0) {
+      const lift = track(t, 0, [[B(11) + 0.2, 1, 0.4, 0.6], [B(12), 0, 0.3, 0.7]]);
+      const s = 1 + 0.025 * lift - 0.012 * press(t, B(12));
+      x -= (w * (s - 1)) / 2; y -= (h * (s - 1)) / 2; w *= s; h *= s;
+      r = lerp(r, 0, tw(t, B(12) + 0.04, B(13), eio4));
+    }
+    show(T.root, vis);
+    box(T.root, x, y, w, h, {
+      borderRadius: px(r),
+      transformOrigin: `${px(ox)} ${px(oy)}`,
+      transform: `scale(${Math.max(sx, 1e-3).toFixed(5)}, ${Math.max(sy, 1e-3).toFixed(5)})`,
+    });
+    // beat 9: names rise, price chips spring up
+    const ti = B(9) + tile.order * 0.035;
+    // the click on the hero sends names below their mask line and chips back to zero
+    const out = tw(t, B(12) + 0.02, B(12) + 0.3, ei);
+    const nr = track(t, 0, [[ti, 1, 0.4, 0.8]]) - out;
+    T.name.style.transform = `translateY(${px((1 - nr) * 40)})`;
+    const cp = pop(t, ti + 0.06, 0.38, 0.52) * (1 - tw(t, B(12), B(12) + 0.22, eio));
+    updateGlassChip(T.chip, w, h, cp, IMG[tile.key]);
+  });
+
+  // ── cursor ──
+  let cur = null;
+  if (t >= B(3) && t < B(6)) {
+    const [x, y] = cursorPath(t, 1250, 1300, [[B(3), B(4) - 0.08, 880, 770, eio]]);
+    const leave = cursorPath(t, 0, 0, [[B(5) + 0.1, B(6), 380, 560, eio]]);
+    cur = { x: x + leave[0], y: y + leave[1], size: 46, press: press(t, B(4)), visible: true };
+  } else if (t >= B(10) + 0.3 && t < B(13)) {
+    const [x, y] = cursorPath(t, 1300, 1380, [[B(10) + 0.3, B(11) + 0.3, 905, 640, eio]]);
+    const [sx, sy] = toScreen(cam, x, y);
+    cur = { x: sx, y: sy, size: 46 * cam.s, press: press(t, B(12)), visible: true };
+  }
+  return { cursor: cur };
+};
+</script>
+
+<script>
+'use strict';
+// ═════════════════════════════ PHONE (glass → stage → order) ═════════════════════════════
+// One world: the hero cover at (0,0,1440,1440); the lock screen grows around it; the phone
+// is revealed by pulling back; the Kuznec window lives to the right of the phone.
+const PHONE = act('phone', B(13), B(48));
+const pw = el('div', 'world', PHONE.root);
+const SCR = { x: 0, y: -840, w: 1440, h: 3120, r: 220 };
+const COVER1 = 'vampirism', COVER2 = 'flame';
+const BUY = UPGRADES[COVER2];
+const WORD = UPGRADES[COVER1].name;
+const DROP = { x: 720, y: 1170 };                 // where the word melts / the toolbar lives
+const SLIDE = { x0: 720 - 470, x1: 720 + 470 };   // knob travel
+
+// ── layers ──
+const bgCanvas = canvas(W, H, pw);
+const smallCanvas = document.createElement('canvas');
+const bezel = el('div', 'abs', pw, { background: '#1b1b1d' });
+const bezelRing = el('div', 'abs', bezel, { border: '2px solid #3b3b3f', boxSizing: 'border-box', borderRadius: 'inherit' });
+const screenEl = el('div', 'abs', pw, { overflow: 'hidden', background: '#000' });
+const wallImg = el('img', 'abs', screenEl);
+wallImg.src = `assets/covers/${COVER2}-wall.jpg`;
+const WALL_K = SCR.h / SCR.w, WALL_OY = (SCR.h / SCR.w - 1) / 2;   // portrait twin of the cover: its centre square is the cover
+const liftShade = el('div', 'abs', screenEl, { background: 'rgba(0,0,0,0)' });
+
+const wordGooF = makeGoo('goo-word');
+const wordGoo = el('div', 'abs', pw, { width: px(W), height: px(H) });
+// glass glyphs are rasterised from the font, so they are built in init() once fonts are loaded
+let letters = [];
+const toolbar = Glass(wordGoo);
+const ICONS = {
+  hammer: '<path d="M14 40 L34 20" /><path d="M26 12 L40 26 L46 20 L36 8 Z" fill="#fff" stroke="none"/><path d="M30 10 L22 6"/>',
+  plan: '<path d="M12 42 V30"/><path d="M24 42 V20"/><path d="M36 42 V10"/>',
+  coin: '<circle cx="26" cy="26" r="16"/><path d="M26 17 V35 M20.5 22 H30 M20.5 30 H30"/>',
+  share: '<path d="M26 32 V8"/><path d="M17 16 L26 7 L35 16"/><path d="M14 24 H10 V44 H42 V24 H38"/>',
+};
+const iconEls = Object.entries(ICONS).map(([k, d]) => {
+  const s = svg('svg', { viewBox: '0 0 52 52', width: 78, height: 78, fill: 'none', stroke: '#fff', 'stroke-width': 4.2, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' });
+  s.innerHTML = d;
+  s.classList.add('abs');
+  toolbar.content.appendChild(s);
+  return s;
+});
+const trackBase = el('div', 'abs', toolbar.content, { background: 'rgba(255,255,255,.34)', borderRadius: '6px' });
+const trackFill = el('div', 'abs', toolbar.content, { background: '#fff', borderRadius: '6px' });
+const labelMaskL = el('div', 'mask', pw), labelMaskR = el('div', 'mask', pw);
+const labelL = el('div', 'abs nowrap', labelMaskL, { font: '650 46px Geist', color: '#fff', textShadow: '0 2px 10px rgba(0,0,0,.25)' });
+const labelR = el('div', 'abs nowrap', labelMaskR, { font: '650 46px Geist', color: '#fff', textShadow: '0 2px 10px rgba(0,0,0,.25)' });
+labelL.textContent = 'Обычный'; labelR.textContent = 'Улучшенный';
+const orb = Glass(pw);
+
+// lock screen furniture
+const dateMask = el('div', 'mask', pw);
+const dateEl = el('div', 'abs nowrap', dateMask, { font: '600 60px Geist', color: '#fff', textShadow: '0 2px 12px rgba(0,0,0,.2)' });
+dateEl.textContent = 'вторник, 6 октября';
+const digitsWrap = el('div', 'abs', pw);
+const CLOCK = '21:40';
+let digits = [];
+PHONE.init = async () => {
+  letters = [...WORD].map((ch) => GlassLetter(wordGoo, ch, '800 212px Geist', 24, 46));
+  wordGoo.insertBefore(toolbar.root, null);            // toolbar stays above the letters
+  digits = [...CLOCK].map((ch) => GlassLetter(digitsWrap, ch, '700 360px Geist', 30, 50));
+};
+const homeBar = el('div', 'abs', pw, { background: '#fff' });
+const notif = Glass(pw);
+const nAvatar = el('img', 'abs', notif.content, { borderRadius: '50%', objectFit: 'cover' });
+nAvatar.src = 'assets/covers/anvil.jpg';
+const nTitleM = el('div', 'mask', notif.content), nBodyM = el('div', 'mask', notif.content), nTimeM = el('div', 'mask', notif.content);
+const nTitle = el('div', 'abs nowrap', nTitleM, { font: '700 52px Geist', color: '#fff' });
+const nBody = el('div', 'abs nowrap', nBodyM, { font: '500 46px Geist', color: 'rgba(255,255,255,.92)' });
+const nTime = el('div', 'abs nowrap', nTimeM, { font: '500 40px Geist', color: 'rgba(255,255,255,.7)' });
+nTitle.textContent = 'Кузнец'; nBody.textContent = 'В кузнице 40 улучшений. Открой /kuznec'; nTime.textContent = 'сейчас';
+
+// island + the drop that pinches off it
+const islGooF = makeGoo('goo-island');
+const islGoo = el('div', 'abs', pw, { left: '-200px', top: '-1200px', width: '4600px', height: '3400px' });
+const island = el('div', 'abs', islGoo, { background: '#000' });
+const neck = el('div', 'abs', islGoo, { background: '#000' });
+const blob = el('div', 'abs', islGoo, { background: '#000', borderRadius: '50%' });
+
+// ── the Kuznec window ──
+const WIN = { x: 1700, y: -260, w: 2467, h: 1960 };
+const win = el('div', 'abs', pw, { overflow: 'hidden', background: '#FBFAF7', boxShadow: '0 40px 120px rgba(0,0,0,.14), 0 0 0 2px rgba(0,0,0,.06)' });
+const rail = el('div', 'abs', pw, { background: '#0B0B0C' });
+const winHead = el('div', 'abs', win, { left: '0', top: '0', width: px(WIN.w), height: '250px', borderBottom: '2px solid #E6E1D7', boxSizing: 'border-box' });
+const hAvatar = el('img', 'abs', winHead, { left: '70px', top: '50px', width: '150px', height: '150px', borderRadius: '50%', objectFit: 'cover' });
+hAvatar.src = 'assets/covers/anvil.jpg';
+const hName = el('div', 'abs nowrap', winHead, { left: '260px', top: '48px', font: '700 84px Geist', color: 'var(--ink)', lineHeight: '90px' });
+hName.textContent = 'Кузнец';
+const hSubM = el('div', 'mask', winHead, { left: '262px', top: '142px', width: '1200px', height: '64px' });
+const hSub1 = el('div', 'abs nowrap', hSubM, { font: '500 52px Geist', color: '#8b877f', lineHeight: '64px' });
+const hSub2 = el('div', 'abs nowrap', hSubM, { font: '500 52px Geist', color: '#8b877f', lineHeight: '64px' });
+hSub1.textContent = 'плагин · /kuznec · 54 слота'; hSub2.textContent = `Улучшения: ${BUY.item}`;
+const menuBtn = el('div', 'abs', pw, { background: '#0B0B0C', overflow: 'hidden' });
+const menuTxtM = el('div', 'mask', menuBtn, { inset: '0' });
+const menuTxt1 = el('div', 'abs nowrap', menuTxtM, { font: '600 54px Geist', color: '#fff', textAlign: 'center', lineHeight: '120px' });
+const menuTxt2 = el('div', 'abs nowrap', menuTxtM, { font: '650 64px Geist', color: '#fff', textAlign: 'center' });
+menuTxt1.textContent = '☰  Меню'; menuTxt2.textContent = `Купить · ${money(BUY.price)} монет`;
+// 54-slot main menu: borders and inner ring are filler panes, 20–24 are the hand and armour
+const SLOT = { s: 210, g: 22, x0: WIN.x + 200, y0: WIN.y + 370 };
+const DECO1 = new Set([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 18, 26, 27, 35, 36, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53]);
+const ACTIVE = { 20: 'hand', 21: 'helmet', 22: 'chest', 23: 'legs', 24: 'boots' };
+const SLOT_ICON = {
+  hand: '<path d="M30 70 L66 34"/><path d="M60 26 L74 40 M54 30 L70 46"/><path d="M26 66 L34 74"/>',
+  helmet: '<path d="M26 64 V44 Q26 24 50 24 Q74 24 74 44 V64"/><path d="M26 50 H74"/><path d="M42 50 V64 M58 50 V64"/>',
+  chest: '<path d="M30 26 L40 22 Q50 30 60 22 L70 26 L74 44 L66 46 V76 H34 V46 L26 44 Z"/>',
+  legs: '<path d="M32 24 H68 V76 H56 L50 42 L44 76 H32 Z"/>',
+  boots: '<path d="M34 24 H50 V54 H70 V72 H34 Z"/>',
+};
+const slots = [];
+for (let i = 0; i < 54; i++) {
+  const e = el('div', 'abs', win, { borderRadius: '30px', boxSizing: 'border-box' });
+  if (ACTIVE[i]) {
+    e.style.background = '#fff'; e.style.border = '5px solid #0B0B0C';
+    const s = svg('svg', { viewBox: '0 0 100 100', width: '100%', height: '100%', fill: 'none', stroke: '#B9B3A8', 'stroke-width': 5.5, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' });
+    s.innerHTML = SLOT_ICON[ACTIVE[i]];
+    e.appendChild(s);
+  } else e.style.background = DECO1.has(i) ? '#E9E4DA' : '#DCD6CA';
+  slots.push(e);
+}
+// reply page: header image → plan card; chips; payment
+const cardBorder = el('div', 'abs', win, { border: '4px solid #0B0B0C', boxSizing: 'border-box', background: '#fff' });
+const headImg = el('img', 'abs', win, { objectFit: 'cover' });
+headImg.src = `assets/covers/${COVER2}.jpg`;
+const nameM = el('div', 'mask', win), loreM = el('div', 'mask', win), priceM = el('div', 'mask', win), priceLM = el('div', 'mask', win);
+const nameEl = el('div', 'abs nowrap', nameM, { font: '750 104px Geist', color: 'var(--ink)', lineHeight: '120px', letterSpacing: '-1px', transformOrigin: '0 0' });
+const loreEl = el('div', 'abs nowrap', loreM, { font: '500 58px Geist', color: '#77736b', lineHeight: '70px', transformOrigin: '0 0' });
+const priceEl = el('div', 'abs nowrap', priceM, { font: '800 96px Geist', color: 'var(--ink)', lineHeight: '110px', textAlign: 'right' });
+const priceLbl = el('div', 'abs nowrap', priceLM, { font: '500 52px Geist', color: '#77736b', lineHeight: '64px', textAlign: 'right' });
+nameEl.textContent = BUY.name; loreEl.textContent = BUY.lore; priceEl.textContent = money(BUY.price); priceLbl.textContent = 'монет';
+const CHIPS = ['Вампиризм', 'Пламенное лезвие', 'Палач'];
+const chipEls = CHIPS.map((c) => {
+  const e = el('div', 'abs nowrap', win, { border: '4px solid #0B0B0C', boxSizing: 'border-box', borderRadius: '80px', font: '600 56px Geist', color: 'var(--ink)', textAlign: 'center', lineHeight: '132px' });
+  e.textContent = c;
+  return e;
+});
+const chipHi = el('div', 'abs', win, { background: '#0B0B0C', borderRadius: '80px', overflow: 'hidden' });
+const chipHiTxt = CHIPS.map((c) => { const e = el('div', 'abs nowrap', chipHi, { font: '600 56px Geist', color: '#fff', textAlign: 'center', lineHeight: '140px' }); e.textContent = c; return e; });
+const payRow = el('div', 'abs', win, { border: '4px solid #E1DBD0', boxSizing: 'border-box', borderRadius: '56px', background: '#fff' });
+const payIcon = el('div', 'abs', payRow, { left: '44px', top: '50px', width: '110px', height: '110px', borderRadius: '50%', background: '#F2C14E', boxShadow: 'inset 0 -8px 0 #D49A22' });
+const payTitle = el('div', 'abs nowrap', payRow, { left: '196px', top: '42px', font: '650 62px Geist', color: 'var(--ink)' });
+const paySub = el('div', 'abs nowrap', payRow, { left: '196px', top: '118px', font: '500 48px Geist', color: '#77736b' });
+payTitle.textContent = 'Vault'; paySub.textContent = 'Баланс 128 400 монет';
+const radio = el('div', 'abs', payRow, { width: '96px', height: '96px', borderRadius: '50%', border: '5px solid #0B0B0C', boxSizing: 'border-box' });
+const radioDot = el('div', 'abs', radio, { left: '13px', top: '13px', width: '60px', height: '60px', borderRadius: '50%', background: '#0B0B0C' });
+
+// the reply page scrolls away when the order starts
+const winPage = el('div', 'abs', win, { left: '0', top: '0', width: '100%', height: '100%' });
+for (const e of [cardBorder, headImg, nameM, loreM, priceM, priceLM, ...chipEls, chipHi, payRow]) winPage.appendChild(e);
+
+// drag tile (lifted from the wallpaper)
+const lift = el('div', 'abs', pw, { overflow: 'hidden' });
+const liftImg = el('img', 'abs', lift);
+liftImg.src = `assets/covers/${COVER2}-wall.jpg`;
+
+// ── order: one black shape ──
+const order = el('div', 'abs', pw, { background: '#0B0B0C', overflow: 'hidden' });
+const oTexts = ['paid', 'forge', 'way', 'done'].map(() => { const m = el('div', 'mask', order, { inset: '0' }); return { m, e: el('div', 'abs nowrap', m, { color: '#fff' }) }; });
+const oBuyM = el('div', 'mask', order, { inset: '0' });
+const oBuy = el('div', 'abs nowrap', oBuyM, { font: '650 64px Geist', color: '#fff', textAlign: 'center' });
+oBuy.textContent = `Купить · ${money(BUY.price)} монет`;
+const oCheck = svg('svg', { viewBox: '0 0 100 100', fill: 'none', stroke: '#fff', 'stroke-width': 9, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' });
+oCheck.classList.add('abs'); order.appendChild(oCheck);
+const oCheckPath = svg('path', { d: 'M24 52 L43 70 L77 32', 'stroke-dasharray': 100, pathLength: 100 }, oCheck);
+const oBar = el('div', 'abs', order, { background: 'rgba(255,255,255,.22)', borderRadius: '10px' });
+const oBarFill = el('div', 'abs', oBar, { background: '#fff', borderRadius: '10px', height: '100%' });
+const oLine = el('div', 'abs', order, { background: 'rgba(255,255,255,.35)' });
+const oKey = el('div', 'abs nowrap', order, { background: '#fff', color: '#0B0B0C', font: '700 52px Geist', borderRadius: '50px', textAlign: 'center' });
+oKey.textContent = `+ ${BUY.name}`;
+const oFrom = el('img', 'abs', order, { borderRadius: '50%', objectFit: 'cover' }); oFrom.src = 'assets/covers/anvil.jpg';
+const oTo = el('img', 'abs', order, { borderRadius: '50%', objectFit: 'cover' }); oTo.src = `assets/covers/${COVER2}.jpg`;
+
+// ── helpers ──
+// mosaic computed from the same image: block size b (1 = full detail)
+function paintBg(block) {
+  const ctx = bgCanvas.getContext('2d');
+  if (block <= 1) { ctx.imageSmoothingEnabled = true; ctx.drawImage(IMG[COVER1], 0, 0, W, H); return; }
+  const n = Math.max(1, Math.round(W / block));
+  smallCanvas.width = n; smallCanvas.height = n;
+  const sc = smallCanvas.getContext('2d');
+  sc.imageSmoothingEnabled = true; sc.imageSmoothingQuality = 'high';
+  sc.drawImage(IMG[COVER1], 0, 0, n, n);
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(smallCanvas, 0, 0, n, n, 0, 0, W, H);
+  ctx.imageSmoothingEnabled = true;
+}
+const drawBgClone = (ctx, gx, gy) => ctx.drawImage(bgCanvas, -gx, -gy);
+// lock-screen geometry while the orb grows into it (g: 0 = orb, 1 = screen)
+const ORB = { cx: 720, cy: 640, r: 280 };
+function screenRect(g) {
+  return {
+    x: lerp(ORB.cx - ORB.r, SCR.x, g), y: lerp(ORB.cy - ORB.r, SCR.y, g),
+    w: lerp(2 * ORB.r, SCR.w, g), h: lerp(2 * ORB.r, SCR.h, g),
+    r: lerp(ORB.r, SCR.r, smooth(clamp(g * 1.25))),
+  };
+}
+// where the portrait wallpaper is drawn, given the square its centre occupies
+const wallFromSquare = (x, y, s) => ({ x, y: y - s * WALL_OY, w: s, h: s * WALL_K });
+function wallRect(g) {
+  const a = [ORB.cx - ORB.r, ORB.cy - ORB.r, 2 * ORB.r], b = [SCR.x, SCR.y + (SCR.h - SCR.w) / 2, SCR.w];
+  return wallFromSquare(lerp(a[0], b[0], g), lerp(a[1], b[1], g), lerp(a[2], b[2], g));
+}
+function drawWall(ctx, gx, gy, g = 1) {
+  const r = screenRect(g), wr = wallRect(g);
+  ctx.save();
+  ctx.translate(-gx, -gy);
+  rrPath(ctx, r.x, r.y, r.w, r.h, r.r); ctx.clip();
+  ctx.drawImage(IMG.wall, wr.x, wr.y, wr.w, wr.h);
+  ctx.restore();
+}
+const slotXY = (i) => [SLOT.x0 + (i % 9) * (SLOT.s + SLOT.g), SLOT.y0 + Math.floor(i / 9) * (SLOT.s + SLOT.g)];
+
+PHONE.update = (t) => {
+  // ───────── camera ─────────
+  let cam = { x: CX, y: CY, s: 1 };
+  cam.y = path(t, CY, [[B(24) + 0.05, B(24) + 0.5, -120, eio], [B(26) - 0.12, B(26) + 0.24, 1560, eio4], [B(27), B(27) + 0.46, CY, eio],
+    [B(28) - 0.04, B(28) + 0.3, SCR.y + 260, eio], [B(29) + 0.06, B(30) - 0.02, WIN.y + 300, eio], [B(30) + 0.12, B(31) + 0.1, CY, eio]]);
+  cam.x = path(t, CX, [[B(27), B(27) + 0.46, 2020, eio], [B(28) - 0.04, B(28) + 0.3, 1060, eio], [B(29) + 0.06, B(30) - 0.02, WIN.x + 700, eio],
+    [B(30) + 0.12, B(31) + 0.1, 2020, eio], [B(33) + 0.05, B(34) + 0.1, WIN.x + WIN.w / 2, eio]]);
+  cam.s = path(t, 1, [[B(27), B(27) + 0.46, 0.3, eio], [B(28) - 0.04, B(28) + 0.3, 0.8, eio], [B(29) + 0.06, B(30) - 0.02, 0.5, eio],
+    [B(30) + 0.12, B(31) + 0.1, 0.3, eio], [B(33) + 0.05, B(34) + 0.1, 0.55, eio]]);
+  // order: zoom onto the black shape
+  const OC = { x: WIN.x + WIN.w / 2, y: 980 };
+  cam.x = lerp(cam.x, OC.x, tw(t, B(43) - 0.05, B(43) + 0.35, eio));
+  cam.y = lerp(cam.y, OC.y, tw(t, B(43) - 0.05, B(43) + 0.35, eio));
+  cam.s = lerp(cam.s, 1.0, tw(t, B(43) - 0.05, B(43) + 0.35, eio));
+  camTransform(pw, cam);
+  const q = Math.max(1, cam.s);
+
+  // ───────── background cover / mosaic ─────────
+  const sliderP = tw(t, B(18) + 0.1, B(21) - 0.05, eio);           // knob travel 0..1
+  let block = 1;
+  if (t >= B(17) + 0.05 && t < B(18) + 0.1) block = Math.round(Math.exp(lerp(0, Math.log(96), tw(t, B(17) + 0.05, B(17) + 0.3, eo))));
+  else if (t >= B(18) + 0.1 && t < B(21)) block = sliderP >= 0.995 ? 1 : [96, 64, 40, 24, 12, 6, 3][Math.min(6, Math.floor(sliderP * 7))];
+  const bgOn = t < B(24) + 0.6;
+  show(bgCanvas, bgOn);
+  if (bgOn) paintBg(block);
+
+  // ───────── glass word → droplet → toolbar ─────────
+  const wordOn = t < B(16) + 0.1;
+  show(wordGoo, t < B(22));
+  const melt0 = B(15);
+  const gooSd = t < melt0 - 0.05 ? 0 : t < B(16) - 0.05 ? 13 * tw(t, melt0 - 0.05, melt0 + 0.1, eo) : 13 * (1 - tw(t, B(16) - 0.05, B(16) + 0.08, eo));
+  wordGooF.set(gooSd);
+  wordGoo.style.filter = gooSd > 0.05 ? `url(#${wordGooF.id})` : 'none';
+  const fontPx = 212;
+  const mctx = chipMeasure; mctx.font = `800 ${fontPx}px Geist`;
+  const advs = letters.map((L) => mctx.measureText(L.ch).width);
+  const total = advs.reduce((a, b) => a + b, 0);
+  let pen = CX - total / 2;
+  const base = CY + 76;
+  letters.forEach((L, i) => {
+    const ti = B(13) + 0.02 + i * 0.1;
+    const s = pop(t, ti, 0.42, 0.55);
+    const rise = (1 - track(t, 0, [[ti, 1, 0.42, 0.8]])) * 70;
+    // melt: slide into the droplet and shrink
+    const mi = tw(t, melt0 + Math.abs(i - 4) * 0.028, melt0 + 0.36 + Math.abs(i - 4) * 0.028, eio);
+    const cx0 = pen + advs[i] / 2;
+    const x = lerp(pen, DROP.x - advs[i] / 2, mi);
+    const y = lerp(base + rise, DROP.y + 76, mi);
+    const sc = s * lerp(1, 0.16, mi);
+    if (wordOn) updateGlassLetter(L, x, y, sc, 34, (ctx, ox, oy) => ctx.drawImage(bgCanvas, -ox, -oy));
+    else show(L.root, false);
+    pen += advs[i];
+  });
+  // droplet / toolbar
+  const dropS = pop(t, melt0 + 0.1, 0.5, 0.62);
+  let tbW = track(t, 200, [[B(16), 680, 0.6, 0.5], [B(17) + 0.04, 1160, 0.5, 0.72]]);
+  let tbH = track(t, 200, [[B(16), 136, 0.6, 0.5]]);
+  // beat 21: the slider collapses into the knob, which becomes a lens
+  const collapse = tw(t, B(21), B(21) + 0.3, eio);
+  const knobX = lerp(SLIDE.x0, SLIDE.x1, sliderP);
+  let tbX = lerp(DROP.x - tbW / 2, knobX - 60, collapse);
+  tbW = lerp(tbW, 120, collapse);
+  const tbOn = t >= melt0 + 0.1 && t < B(21) + 0.3;
+  show(toolbar.root, tbOn);
+  if (tbOn) {
+    const ds = Math.max(1e-3, dropS);
+    const w = tbW * ds, h = tbH * ds;
+    updateGlass(toolbar, { x: tbX + (tbW - w) / 2, y: DROP.y - h / 2, w, h, r: h / 2, bevel: Math.min(h / 2, 46), scale: 70, draw: drawBgClone, tint: 0.08, shadow: 0.14 });
+    // icons spring up from zero, then shrink back when the slider takes over
+    iconEls.forEach((ic, i) => {
+      const ti = B(16) + 0.14 + i * 0.05;
+      const s = track(t, 0, [[ti, 1, 0.36, 0.5], [B(17) + 0.02, 0, 0.26, 0.9]]);
+      const ix = w / 2 + (i - 1.5) * 150 - 39;
+      show(ic, s > 0.01 && t < B(18));
+      ic.style.transform = `translate(${px(ix)}, ${px(h / 2 - 39)}) scale(${Math.max(0, s).toFixed(4)})`;
+      ic.style.transformOrigin = '39px 39px';
+    });
+    // the slider's track draws across
+    const tr = tw(t, B(17) + 0.1, B(17) + 0.42, eo) * (1 - collapse);
+    const tx0 = SLIDE.x0 - (tbX + (tbW - w) / 2), tLen = (SLIDE.x1 - SLIDE.x0) * tr;
+    show(trackBase, tr > 0.001); show(trackFill, tr > 0.001);
+    box(trackBase, tx0, h / 2 - 6, tLen, 12);
+    box(trackFill, tx0, h / 2 - 6, Math.min(tLen, knobX - SLIDE.x0), 12);
+  }
+  // labels rise from behind their mask lines; sink at the lens
+  const lab = track(t, 0, [[B(17) + 0.18, 1, 0.42, 0.8], [B(21), 0, 0.3, 1]]);
+  show(labelMaskL, t >= B(17) && t < B(22)); show(labelMaskR, t >= B(17) && t < B(22));
+  box(labelMaskL, SLIDE.x0 - 50, DROP.y - 168, 420, 64); box(labelMaskR, SLIDE.x1 - 370, DROP.y - 168, 420, 64);
+  box(labelL, 0, (1 - lab) * 70, 420, 64); box(labelR, 0, (1 - lab) * 70, 420, 64, { textAlign: 'right' });
+
+  // ───────── knob → lens → orb → lock screen ─────────
+  const g = track(t, 0, [[B(24), 1, 0.62, 0.86]]);                 // orb → screen
+  const knobOn = t >= B(17) + 0.12 && g < 0.22;
+  show(orb.root, knobOn);
+  if (knobOn) {
+    const k0 = pop(t, B(17) + 0.14, 0.4, 0.55);
+    const grab = track(t, 0, [[B(18) + 0.02, 1, 0.3, 0.6], [B(21), 0, 0.3, 0.6]]);
+    let d = 104 * k0 * (1 + 0.18 * grab);
+    let cx = knobX, cy = DROP.y;
+    const lens = track(t, 0, [[B(21), 1, 0.5, 0.62]]);
+    d = lerp(d, 300, lens);
+    const rise = track(t, 0, [[B(22), 1, 0.55, 0.66]]);
+    cx = lerp(cx, ORB.cx, rise); cy = lerp(cy, ORB.cy, rise); d = lerp(d, 2 * ORB.r, rise);
+    const inner = track(t, 0, [[B(23), 1, 0.48, 0.74]]);            // next cover opens inside
+    const gg = clamp(g / 0.22);
+    const sr = screenRect(clamp(g)), useScreen = g > 0.001;
+    const rect = useScreen ? sr : { x: cx - d / 2, y: cy - d / 2, w: d, h: d, r: d / 2 };
+    const refr = lerp(lerp(lerp(46, 120, lens), 160, rise), 0, gg);
+    updateGlass(orb, {
+      x: rect.x, y: rect.y, w: rect.w, h: rect.h, r: rect.r, bevel: Math.max(10, lerp(lerp(30, 120, lens), 240, rise) * (1 - gg)),
+      scale: refr, tint: 0.06 * (1 - gg), rimA: 1 - gg, shadow: 0.18 * (1 - gg),
+      draw: (ctx, gx, gy) => {
+        ctx.drawImage(bgCanvas, -gx, -gy);
+        // track under the knob so the glass bends it
+        if (t < B(21) + 0.3) {
+          const tr = tw(t, B(17) + 0.1, B(17) + 0.42, eo) * (1 - collapse);
+          ctx.fillStyle = 'rgba(255,255,255,.9)';
+          ctx.fillRect(SLIDE.x0 - gx, DROP.y - 6 - gy, (knobX - SLIDE.x0) * Math.min(1, tr * 3), 12);
+        }
+        if (inner > 0.001 || useScreen) {
+          ctx.save();
+          if (!useScreen) { ctx.beginPath(); ctx.arc(cx - gx, cy - gy, Math.max(0, (d / 2) * inner), 0, Math.PI * 2); ctx.clip(); const wr = wallFromSquare(cx - d / 2 - gx, cy - d / 2 - gy, d); ctx.drawImage(IMG.wall, wr.x, wr.y, wr.w, wr.h); }
+          else drawWall(ctx, gx, gy, clamp(g));
+          ctx.restore();
+        }
+      },
+    });
+  }
+  // the plain screen takes over once the glass has gone flat (identical pixels)
+  const scrOn = g >= 0.22 && t < B(48);
+  show(screenEl, scrOn);
+  if (scrOn) {
+    const r = screenRect(clamp(g)), wr = wallRect(clamp(g));
+    box(screenEl, r.x, r.y, r.w, r.h, { borderRadius: px(r.r) });
+    box(wallImg, wr.x - r.x, wr.y - r.y, wr.w, wr.h);
+    box(liftShade, 0, 0, r.w, r.h);
+  }
+
+  // ───────── lock screen: clock, date, home bar → notification ─────────
+  const lockOn = t >= B(24) + 0.3 && t < B(48);
+  show(digitsWrap, lockOn); show(dateMask, lockOn); show(homeBar, false); show(notif.root, false);
+  if (lockOn) {
+    mctx.font = '700 360px Geist';
+    const dAdv = digits.map((L) => mctx.measureText(L.ch).width);
+    let dx = CX - dAdv.reduce((a, b) => a + b, 0) / 2;
+    digits.forEach((L, i) => {
+      const s = pop(t, B(25) + i * 0.06, 0.42, 0.55);
+      updateGlassLetter(L, dx, SCR.y + 690, s, 40, (ctx, ox, oy) => drawWall(ctx, ox, oy));
+      dx += dAdv[i];
+    });
+    const dr = track(t, 0, [[B(25) + 0.04, 1, 0.42, 0.8]]);
+    box(dateMask, 0, SCR.y + 250, W, 80);
+    box(dateEl, 0, (1 - dr) * 80, W, 80, { textAlign: 'center', lineHeight: '80px' });
+    // home bar stretches into the glass notification
+    const nb = track(t, 0, [[B(26) + 0.04, 1, 0.55, 0.68]]);
+    const hb = { x: CX - 210, y: SCR.y + SCR.h - 62, w: 420, h: 16, r: 8 };
+    const nr = { x: 70, y: SCR.y + SCR.h - 560, w: 1300, h: 300, r: 80 };
+    if (nb < 0.04) {
+      show(homeBar, true);
+      box(homeBar, hb.x, hb.y, hb.w, hb.h, { borderRadius: px(hb.r) });
+    } else {
+      show(notif.root, true);
+      const u = clamp(nb, 0, 1.2);
+      const R = { x: lerp(hb.x, nr.x, nb), y: lerp(hb.y, nr.y, nb), w: lerp(hb.w, nr.w, nb), h: lerp(hb.h, nr.h, nb), r: lerp(hb.r, nr.r, clamp(nb)) };
+      updateGlass(notif, { ...R, bevel: Math.min(R.h / 2, 56), scale: 60 * clamp(nb), tint: lerp(1, 0.1, clamp(u * 3)), shadow: 0.2 * clamp(nb), draw: (ctx, gx, gy) => drawWall(ctx, gx, gy) });
+      const ci = (k) => track(t, 0, [[B(26) + 0.2 + k * 0.05, 1, 0.42, 0.82]]);
+      const av = pop(t, B(26) + 0.16, 0.4, 0.55);
+      box(nAvatar, 44, (R.h - 140) / 2, 140, 140, { transform: `scale(${av.toFixed(4)})`, transformOrigin: '50% 50%' });
+      box(nTitleM, 220, 62, 700, 66); box(nTitle, 0, (1 - ci(0)) * 66, 700, 66, { lineHeight: '66px' });
+      box(nBodyM, 220, 150, 1060, 62); box(nBody, 0, (1 - ci(1)) * 62, 1060, 62, { lineHeight: '62px' });
+      box(nTimeM, R.w - 260, 66, 220, 56); box(nTime, 0, (1 - ci(0)) * 56, 220, 56, { lineHeight: '56px', textAlign: 'right' });
+    }
+  }
+
+  // ───────── stage: bezel, island → window ─────────
+  const bz = 64 * track(t, 0, [[B(27) + 0.05, 1, 0.45, 0.82]]);
+  show(bezel, bz > 0.1 && t < B(48));
+  box(bezel, SCR.x - bz, SCR.y - bz, SCR.w + 2 * bz, SCR.h + 2 * bz, { borderRadius: px(SCR.r + bz) });
+  box(bezelRing, 0, 0, SCR.w + 2 * bz, SCR.h + 2 * bz);
+  const ISL = { w: 400, h: 118, cx: CX, cy: SCR.y + 56 + 59 };
+  const islS = pop(t, B(24) + 0.35, 0.4, 0.6);
+  show(islGoo, t >= B(24) + 0.35 && t < B(30) + 0.02);
+  const stretch = tw(t, B(28), B(29) - 0.02, eio);                          // the drop slides out on a thinning neck
+  const fly = tw(t, B(29) + 0.06, B(30) - 0.02, eio);
+  const blobStart = { x: ISL.cx + ISL.w / 2 - 59, y: ISL.cy };
+  const blobPull = { x: ISL.cx + ISL.w / 2 + 330, y: ISL.cy };
+  const target = { x: WIN.x + 160, y: WIN.y + 125 };
+  // fly along a quadratic arc
+  const ctrl = { x: (blobPull.x + target.x) / 2, y: ISL.cy - 900 };
+  const bxp = (1 - fly) ** 2 * blobPull.x + 2 * (1 - fly) * fly * ctrl.x + fly ** 2 * target.x;
+  const byp = (1 - fly) ** 2 * blobPull.y + 2 * (1 - fly) * fly * ctrl.y + fly ** 2 * target.y;
+  const bxNow = fly > 0 ? bxp : lerp(blobStart.x, blobPull.x, stretch);
+  const byNow = fly > 0 ? byp : blobStart.y;
+  islGooF.set(t < B(28) - 0.05 || t > B(30) - 0.06 ? 0 : 16);
+  islGoo.style.filter = t >= B(28) - 0.05 && t <= B(30) - 0.06 ? `url(#${islGooF.id})` : 'none';
+  box(island, ISL.cx - (ISL.w * islS) / 2 + 200, ISL.cy - (ISL.h * islS) / 2 + 1200, ISL.w * islS, ISL.h * islS, { borderRadius: px(59 * islS) });
+  const blobR = 59 * (t >= B(28) ? 1 : 0.999);
+  // neck: full height as it leaves, thins while stretching, pinches off at beat 29
+  const nh = lerp(lerp(118, 30, stretch), 0, tw(t, B(29) - 0.02, B(29) + 0.06, eio));
+  show(neck, t >= B(28) && nh > 0.5);
+  const nx0 = ISL.cx + ISL.w / 2 - 80, nx1 = lerp(blobStart.x, blobPull.x, stretch);
+  box(neck, nx0 + 200, ISL.cy - nh / 2 + 1200, Math.max(0, nx1 - nx0), nh, { borderRadius: px(nh / 2) });
+  show(blob, t >= B(28) && t < B(30));
+  box(blob, bxNow - blobR + 200, byNow - blobR + 1200, 2 * blobR, 2 * blobR);
+  // window: the drop expands into the blind's rail, which unrolls the window
+  const ex = track(t, 0, [[B(30), 1, 0.5, 0.78]]);
+  const unroll = tw(t, B(31) - 0.02, B(31) + 0.42, eio);
+  const railOn = t >= B(30) && t < B(32) + 0.2;
+  const railH = lerp(250, 60, tw(t, B(31) - 0.02, B(31) + 0.12, eio)) * (1 - tw(t, B(31) + 0.4, B(31) + 0.6, eio));
+  const winH = lerp(0, WIN.h - 60, unroll) + 60 * tw(t, B(31) + 0.4, B(31) + 0.6, eio);
+  if (railOn) {
+    const rx = lerp(target.x - 59, WIN.x, ex), ry = lerp(target.y - 59, WIN.y, ex);
+    const rw = lerp(118, WIN.w, ex), rh = lerp(118, railH, clamp(ex)) ;
+    show(rail, rh > 0.5);
+    box(rail, rx, ry + winH, rw, rh, { borderRadius: px(lerp(59, 60, ex)) });
+  } else show(rail, false);
+  const winOn = t >= B(31) - 0.02;
+  show(win, winOn);
+  box(win, WIN.x, WIN.y, WIN.w, Math.max(0, winH), { borderRadius: '60px' });
+
+  // slots: in at the unroll, out when the reply page pushes forward
+  slots.forEach((e, i) => {
+    const [x, y] = slotXY(i);
+    const dist = Math.hypot((i % 9) - 2, Math.floor(i / 9) - 2);
+    const out = track(t, 0, [[B(35) - 0.06 + dist * 0.018, 1, 0.34, 0.9]]);
+    const s = Math.max(0, 1 - out);
+    show(e, s > 0.01);
+    box(e, x - WIN.x, y - WIN.y, SLOT.s, SLOT.s, { transform: `scale(${s.toFixed(4)})`, transformOrigin: '50% 50%' });
+  });
+  // header subtitle swaps with its own mask
+  const sw = track(t, 0, [[B(35) + 0.04, 1, 0.4, 0.85]]);
+  box(hSub1, 0, -sw * 64, 1200, 64); box(hSub2, 0, (1 - sw) * 64, 1200, 64);
+
+  // ───────── long-press → drag → drop → header → plan card ─────────
+  const LIFT0 = { x: 0, y: 0, w: SCR.w, h: SCR.w, r: 110 };          // the cover square inside the wallpaper
+  const s20 = slotXY(20);
+  const SLOTR = { x: s20[0], y: s20[1], w: SLOT.s, h: SLOT.s, r: 30 };
+  const lp = tw(t, B(32), B(32) + 0.36, eo);                  // long-press: the tile lifts
+  const dg = tw(t, B(33), B(34) - 0.04, eio);                 // drag to slot 20
+  const snap = track(t, 0, [[B(34) - 0.04, 1, 0.3, 0.5]]);
+  const liftOn = t >= B(32) && t < B(35) + 0.02;
+  show(lift, liftOn);
+  if (liftOn) {
+    const sc = 1 + 0.05 * lp * (1 - dg) + 0.08 * (snap - 1) * -1 * 0;
+    let R = { x: lerp(LIFT0.x, SLOTR.x, dg), y: lerp(LIFT0.y, SLOTR.y, dg), w: lerp(LIFT0.w, SLOTR.w, dg), h: lerp(LIFT0.h, SLOTR.h, dg), r: lerp(LIFT0.r, SLOTR.r, dg) };
+    const pulse = 1 + 0.06 * Math.sin(Math.PI * clamp(snap)) * (t > B(34) - 0.04 ? 1 : 0);
+    const s = sc * pulse;
+    box(lift, R.x - (R.w * (s - 1)) / 2, R.y - (R.h * (s - 1)) / 2, R.w * s, R.h * s, {
+      borderRadius: px(R.r), boxShadow: `0 ${px(30 * lp * (1 - dg) + 8)} ${px(80 * lp + 10)} rgba(0,0,0,${(0.28 * lp).toFixed(3)})`,
+    });
+    // the lifted tile shows the same wallpaper pixels it was cut from
+    const wr = wallRect(1), k = (R.w * s) / LIFT0.w;
+    box(liftImg, (wr.x - LIFT0.x) * k, (wr.y - LIFT0.y) * k, wr.w * k, wr.h * k);
+  }
+  // header image grows out of slot 20, then becomes the plan card's image
+  const hd = track(t, 0, [[B(35), 1, 0.55, 0.78]]);
+  const sc2 = track(t, 0, [[B(36), 1, 0.55, 0.85]]);               // scroll → card
+  const HEAD = { x: 200, y: 300, w: 2067, h: 820, r: 48 };
+  const CARD_IMG = { x: 260, y: 300, w: 1947, h: 520, r: 36 };
+  const imgOn = t >= B(35) - 0.02;
+  show(headImg, imgOn);
+  if (imgOn) {
+    const r0 = { x: SLOTR.x - WIN.x, y: SLOTR.y - WIN.y, w: SLOTR.w, h: SLOTR.h, r: 30 };
+    let R = { x: lerp(r0.x, HEAD.x, hd), y: lerp(r0.y, HEAD.y, hd), w: lerp(r0.w, HEAD.w, hd), h: lerp(r0.h, HEAD.h, hd), r: lerp(r0.r, HEAD.r, clamp(hd)) };
+    R = { x: lerp(R.x, CARD_IMG.x, sc2), y: lerp(R.y, CARD_IMG.y, sc2), w: lerp(R.w, CARD_IMG.w, sc2), h: lerp(R.h, CARD_IMG.h, sc2), r: lerp(R.r, CARD_IMG.r, clamp(sc2)) };
+    box(headImg, R.x, R.y, R.w, R.h, { borderRadius: px(R.r) });
+    // border and price row grow from the image's edge
+    const bd = tw(t, B(36) + 0.05, B(36) + 0.4, eo);
+    const pad = 60 * bd, rowH = 360 * tw(t, B(36) + 0.12, B(36) + 0.5, eo);
+    show(cardBorder, bd > 0.001);
+    box(cardBorder, R.x - pad, R.y - pad, R.w + 2 * pad, R.h + 2 * pad + rowH, { borderRadius: px(R.r + pad) });
+    // name + lore: big under the header, then they settle into the card row
+    const nm = track(t, 0, [[B(35) + 0.1, 1, 0.42, 0.82]]);
+    const lo = track(t, 0, [[B(35) + 0.18, 1, 0.42, 0.82]]);
+    const ny = lerp(HEAD.y + HEAD.h + 70, CARD_IMG.y + CARD_IMG.h + 70, sc2);
+    const ns = lerp(1, 0.8, sc2);
+    show(nameM, t >= B(35)); show(loreM, t >= B(35));
+    box(nameM, lerp(HEAD.x, CARD_IMG.x, sc2), ny, 1600, 124 * ns); box(nameEl, 0, (1 - nm) * 124, 1600, 124, { transform: `scale(${ns})` });
+    box(loreM, lerp(HEAD.x, CARD_IMG.x, sc2), ny + 130 * ns, 1600, 76 * lerp(1, 0.86, sc2));
+    box(loreEl, 0, (1 - lo) * 76, 1600, 76, { transform: `scale(${lerp(1, 0.86, sc2)})` });
+    const pr = track(t, 0, [[B(36) + 0.28, 1, 0.42, 0.82]]);
+    show(priceM, t >= B(36)); show(priceLM, t >= B(36));
+    box(priceM, CARD_IMG.x + CARD_IMG.w - 700, CARD_IMG.y + CARD_IMG.h + 66, 700, 110); box(priceEl, 0, (1 - pr) * 110, 700, 110);
+    box(priceLM, CARD_IMG.x + CARD_IMG.w - 700, CARD_IMG.y + CARD_IMG.h + 178, 700, 64); box(priceLbl, 0, (1 - pr) * 64, 700, 64);
+  } else { show(cardBorder, false); show(nameM, false); show(loreM, false); show(priceM, false); show(priceLM, false); }
+
+  // chips: choose the upgrade; the highlight paints across
+  const CH = { y: 1260, h: 140, gap: 30 };
+  chipMeasure.font = '600 56px Geist';
+  const cw = CHIPS.map((c) => chipMeasure.measureText(c).width + 110);
+  const cx0 = 200;
+  const cxs = cw.map((_, i) => cx0 + cw.slice(0, i).reduce((a, b) => a + b + CH.gap, 0));
+  chipEls.forEach((e, i) => {
+    const s = pop(t, B(36) + 0.3 + i * 0.05, 0.38, 0.55);
+    show(e, s > 0.01);
+    box(e, cxs[i], CH.y, cw[i], CH.h, { transform: `scale(${s.toFixed(4)})`, transformOrigin: '50% 50%' });
+  });
+  const hiS = pop(t, B(36) + 0.42, 0.38, 0.55);
+  const right = lerp(cxs[0] + cw[0], cxs[1] + cw[1], tw(t, B(38), B(38) + 0.26, eio));
+  const left = lerp(cxs[0], cxs[1], tw(t, B(38) + 0.1, B(38) + 0.38, eio));
+  show(chipHi, hiS > 0.01);
+  box(chipHi, left, CH.y, right - left, CH.h, { transform: `scale(${hiS.toFixed(4)})`, transformOrigin: '50% 50%' });
+  chipHiTxt.forEach((e, i) => box(e, cxs[i] - left, 0, cw[i], CH.h));
+  // payment
+  const pyS = track(t, 0, [[B(37) + 0.3, 1, 0.45, 0.8]]);
+  show(payRow, pyS > 0.001);
+  box(payRow, 200, 1450 + (1 - pyS) * 60, 2067, 210, { transform: `scale(${lerp(0.96, 1, pyS).toFixed(4)})`, transformOrigin: '50% 0' });
+  box(radio, 2067 - 160, 57, 96, 96);
+  const rd = pop(t, B(39) + 0.04, 0.34, 0.5);
+  radioDot.style.transform = `scale(${rd.toFixed(4)})`;
+
+  // ───────── menu button flies down and becomes "Купить" ─────────
+  const MENU0 = { x: WIN.x + WIN.w - 70 - 360, y: WIN.y + 65, w: 360, h: 120 };
+  const PAY = { x: WIN.x + 200, y: WIN.y + 1730 - 20, w: 2067, h: 190 };
+  const mIn = pop(t, B(31) + 0.45, 0.4, 0.6);
+  const fl = tw(t, B(40), B(40) + 0.42, eio);
+  const grow = track(t, 0, [[B(41), 1, 0.5, 0.7]]);
+  const pr = press(t, B(42));
+  const orderStart = B(43);
+  const menuOn = t >= B(31) + 0.45 && t < orderStart;
+  show(menuBtn, menuOn);
+  if (menuOn) {
+    // arc: up a little, then down to the pay position
+    const mx = lerp(MENU0.x, PAY.x + PAY.w / 2 - MENU0.w / 2, fl);
+    const my = lerp(MENU0.y, PAY.y + (PAY.h - MENU0.h) / 2, fl) - Math.sin(Math.PI * fl) * 260;
+    const w = lerp(MENU0.w, PAY.w, grow), h = lerp(MENU0.h, PAY.h, grow);
+    const x = mx + (MENU0.w - w) / 2 * (1 - 0) - 0, y = my - (h - MENU0.h) / 2;
+    const s = mIn * (1 - 0.03 * pr);
+    box(menuBtn, x, y, w, h, { borderRadius: px(h / 2), transform: `scale(${s.toFixed(4)})`, transformOrigin: '50% 50%' });
+    box(menuTxt1, 0, -grow * h, w, h, { lineHeight: px(h) });
+    box(menuTxt2, 0, (1 - grow) * h, w, h, { lineHeight: px(h) });
+  }
+
+  winPage.style.transform = `translateY(${px(-1900 * tw(t, B(43) - 0.04, B(43) + 0.42, eio))})`;
+  // ───────── order: one black shape keeps changing ─────────
+  const orderOn = t >= orderStart && t < B(48);
+  show(order, orderOn);
+  if (orderOn) {
+    const S0 = { w: PAY.w, h: PAY.h, r: PAY.h / 2 };
+    const shapes = [
+      [B(43), { w: 1240, h: 300, r: 150 }],
+      [B(44), { w: 760, h: 760, r: 190 }],
+      [B(45), { w: 1340, h: 420, r: 210 }],
+      [B(46), { w: 560, h: 560, r: 280 }],
+    ];
+    const sp = (k) => track(t, S0[k], shapes.map(([t0, v]) => [t0, v[k], 0.46, 0.62]));
+    let w = sp('w'), h = sp('h'), r = Math.min(sp('r'), w / 2, h / 2);
+    // beat 47: flood — expand past the corners in ~0.3 s
+    const fld = tw(t, B(47), B(47) + 0.3, eio);
+    const big = 2 * Math.hypot(W, H) / cam.s + 200;
+    w = lerp(w, big, fld); h = lerp(h, big, fld); r = lerp(r, big / 2, fld);
+    // the shape travels from the pay button to the centre of the window as it changes
+    const mv = track(t, 0, [[B(43), 1, 0.5, 0.8]]);
+    const ox = lerp(PAY.x + PAY.w / 2, OC.x, mv), oy = lerp(PAY.y + PAY.h / 2, OC.y, mv);
+    box(order, ox - w / 2, oy - h / 2, w, h, { borderRadius: px(r) });
+    const seg = t < B(44) ? 0 : t < B(45) ? 1 : t < B(46) ? 2 : 3;
+    const bo = tw(t, B(43), B(43) + 0.16, ei);
+    show(oBuyM, bo < 1);
+    box(oBuyM, 0, 0, w, h); box(oBuy, 0, -bo * h, w, h, { lineHeight: px(h) });
+    // each label rises in and leaves upward behind its own mask as the shape morphs
+    const texts = [
+      `Списано · ${money(BUY.price)}`, `Куём · ${Math.round(100 * tw(t, B(44) + 0.05, B(45) - 0.04, eio))}%`, 'Наносим на предмет', 'Готово',
+    ];
+    oTexts.forEach((o, i) => {
+      const tin = shapes[i][0];
+      const inn = track(t, 0, [[tin + 0.06, 1, 0.4, 0.82]]);
+      const outv = i < 3 ? tw(t, shapes[i + 1][0] - 0.02, shapes[i + 1][0] + 0.14, ei) : tw(t, B(47), B(47) + 0.12, ei);
+      const vis = t >= tin && (i === 3 || t < shapes[i + 1][0] + 0.16);
+      show(o.m, vis);
+      o.e.textContent = texts[i];
+      const fs = i === 3 ? 96 : 80;
+      const ty = i === 1 ? h * 0.3 : i === 2 ? h * 0.16 : i === 3 ? h * 0.6 : (h - fs * 1.2) / 2;
+      box(o.m, 0, ty, w, fs * 1.3);
+      box(o.e, i === 0 ? -60 : 0, (1 - inn) * fs * 1.3 - outv * fs * 1.3, w, fs * 1.3, { font: `${i === 3 ? 750 : 650} ${fs}px Geist`, textAlign: 'center', lineHeight: px(fs * 1.3) });
+    });
+    // tick for "paid" and "done"
+    const ck0 = seg === 0 ? tw(t, B(43) + 0.12, B(43) + 0.34, eo) : seg === 3 ? tw(t, B(46) + 0.06, B(46) + 0.3, eo) : 0;
+    show(oCheck, (seg === 0 || seg === 3) && t < B(47) + 0.04);
+    const cs = seg === 0 ? 120 : 220;
+    box(oCheck, seg === 0 ? w / 2 + 360 - cs / 2 : w / 2 - cs / 2, seg === 0 ? h / 2 - cs / 2 : h * 0.16, cs, cs);
+    oCheckPath.setAttribute('stroke-dashoffset', (100 - 100 * ck0).toFixed(2));
+    // forging: a bar draws across
+    show(oBar, seg === 1);
+    box(oBar, 110, h * 0.58, w - 220, 22);
+    oBarFill.style.width = `${(100 * tw(t, B(44) + 0.05, B(45) - 0.04, eio)).toFixed(2)}%`;
+    // on its way: the upgrade travels along a line from the anvil to the sword
+    show(oLine, seg === 2); show(oKey, seg === 2); show(oFrom, seg === 2); show(oTo, seg === 2);
+    if (seg === 2) {
+      const ln = tw(t, B(45) + 0.04, B(45) + 0.2, eo);
+      const ix = pop(t, B(45) + 0.02, 0.36, 0.55);
+      const L0 = 230, L1 = w - 230, ly = h * 0.64;
+      box(oFrom, 60, ly - 85, 170, 170, { transform: `scale(${ix})`, transformOrigin: '50% 50%' });
+      box(oTo, w - 230, ly - 85, 170, 170, { transform: `scale(${ix})`, transformOrigin: '50% 50%' });
+      box(oLine, L0 + 20, ly - 3, (L1 - L0 - 40) * ln, 6);
+      chipMeasure.font = '700 52px Geist';
+      const kw = chipMeasure.measureText(oKey.textContent).width + 70;
+      const kp = tw(t, B(45) + 0.12, B(46) - 0.04, eio);
+      const ks = pop(t, B(45) + 0.1, 0.34, 0.55) * (1 - tw(t, B(46) - 0.06, B(46), ei));
+      box(oKey, lerp(L0 + 20, L1 - 20 - kw, kp), ly - 46, kw, 92, { lineHeight: '92px', transform: `scale(${ks})`, transformOrigin: '50% 50%' });
+    }
+  }
+
+  // ───────── cursor ─────────
+  let cur = null;
+  const scr = (x, y, size = 46) => { const [sx, sy] = toScreen(cam, x, y); return { x: sx, y: sy, size: size * cam.s, visible: true }; };
+  if (t >= B(16) + 0.1 && t < B(21) + 0.15) {
+    const planX = DROP.x - 75;
+    let [x, y] = cursorPath(t, 1300, 1420, [
+      [B(16) + 0.1, B(17) - 0.05, planX + 8, DROP.y + 10, eio],
+      [B(17) + 0.2, B(18) - 0.04, SLIDE.x0 + 12, DROP.y + 14, eio],
+    ]);
+    if (t >= B(18) + 0.1) { x = knobX + 12; y = DROP.y + 14; }
+    cur = { ...scr(x, y), press: press(t, B(17)) + (t >= B(18) && t < B(21) ? clamp((t - B(18)) / 0.05) : 0) - (t >= B(21) ? 0 : 0) };
+    if (t >= B(21)) cur.press = 1 - spring(t - B(21), 0.22, 0.6);
+    cur.y += tw(t, B(21) + 0.02, B(21) + 0.15, ei) * 400;
+  } else if (t >= B(31) && t < B(43)) {
+    const s20c = [s20[0] + SLOT.s / 2, s20[1] + SLOT.s / 2];
+    const card = { x: WIN.x + 200, y: WIN.y };
+    const chip2 = [WIN.x + cxs[1] + cw[1] / 2, WIN.y + CH.y + CH.h / 2];
+    const radioC = [WIN.x + 200 + 2067 - 112, WIN.y + 1450 + 105];
+    const payC = [PAY.x + PAY.w / 2, PAY.y + PAY.h / 2];
+    const [x, y] = cursorPath(t, 1300, 2600, [
+      [B(31), B(32) - 0.06, CX + 40, CY + 40, eio],
+      [B(33), B(34) - 0.04, s20c[0] + 40, s20c[1] + 40, eio],
+      [B(36) + 0.4, B(37) - 0.04, chip2[0], chip2[1], eio],
+      [B(38) + 0.3, B(39) - 0.04, radioC[0], radioC[1], eio],
+      [B(41) + 0.1, B(42) - 0.04, payC[0] + 300, payC[1], eio],
+    ]);
+    cur = scr(x, y, 46);
+    cur.press = (t >= B(32) && t < B(34) - 0.04 ? clamp((t - B(32)) / 0.06) : t >= B(34) - 0.04 ? 1 - spring(t - B(34) + 0.04, 0.22, 0.6) : 0)
+      + press(t, B(37)) + press(t, B(39)) + press(t, B(42));
+    cur.size = 150 * cam.s;          // the cursor is a world-sized object, so it scales with the zoom
+  }
+  return { cursor: cur };
+};
+</script>
+
+<script>
+'use strict';
+// ═════════════════════════════ DESK ═════════════════════════════
+// Black holds a beat, then shrinks into the phone's screen in the desk footage. The same iris
+// opens onto the message and closes again; the screen fills the frame for the return.
+// Footage is all-intra (every frame a keyframe), loaded as a blob URL, and every frame
+// waits for "seeked" before it is drawn.
+const FOOTAGE = { src: 'assets/footage/desk-standin.webm', quad: 'assets/footage/desk-standin.quad.json', zoom: 1.62, push: 0.12 };
+const DESK = act('desk', B(48), B(53));
+const deskCanvas = canvas(W, H, DESK.root);
+const deskVideo = document.createElement('video');
+deskVideo.muted = true; deskVideo.playsInline = true; deskVideo.preload = 'auto';
+let QUAD = null;
+DESK.init = async () => {
+  const [blob, quad] = await Promise.all([fetch(FOOTAGE.src).then((r) => r.blob()), fetch(FOOTAGE.quad).then((r) => r.json())]);
+  QUAD = quad;
+  const ready = new Promise((res, rej) => {
+    deskVideo.addEventListener('loadeddata', res, { once: true });
+    deskVideo.addEventListener('error', () => rej(new Error(`footage failed to load: ${FOOTAGE.src}`)), { once: true });
+  });
+  deskVideo.src = URL.createObjectURL(blob);
+  await ready;
+};
+async function footageAt(ft) {
+  ft = clamp(ft, 0, deskVideo.duration - 0.001);
+  if (deskVideo.readyState >= 2 && Math.abs(deskVideo.currentTime - ft) < 1e-6) return;
+  await new Promise((r) => { deskVideo.addEventListener('seeked', r, { once: true }); deskVideo.currentTime = ft; });
+}
+// Minecraft chat colours from messages.yml: &a green, &6 gold
+const MC = { a: '#55FF55', g: '#FFAA00', w: '#FFFFFF', gray: '#AAAAAA' };
+const MESSAGE = [[MC.a, 'Улучшение '], [MC.g, BUY.name], [MC.a, ' куплено за '], [MC.g, `${money(BUY.price)} монет`], [MC.a, '.']];
+function wrapRuns(ctx, runs, maxW) {
+  // split coloured runs into words, then lay them out in lines
+  const words = [];
+  for (const [c, txt] of runs) txt.split(/(\s+)/).forEach((w) => w && words.push([c, w]));
+  const lines = [[]]; let x = 0;
+  for (const [c, w] of words) {
+    const ww = ctx.measureText(w).width;
+    if (x + ww > maxW && w.trim()) { lines.push([]); x = 0; }
+    if (!w.trim() && x === 0) continue;
+    lines[lines.length - 1].push([c, w, x]); x += ww;
+  }
+  return lines;
+}
+function drawMessage(ctx, w, h) {
+  ctx.fillStyle = '#000'; ctx.fillRect(-w / 2, -h / 2, w, h);
+  const u = w / 600;                                          // layout unit: design at 600 px wide
+  ctx.save(); ctx.scale(u, u);
+  const W2 = w / u, H2 = h / u;
+  // sender row
+  const ay = -H2 * 0.2;
+  ctx.save(); ctx.beginPath(); ctx.arc(-W2 / 2 + 80, ay, 34, 0, Math.PI * 2); ctx.clip();
+  ctx.drawImage(IMG.anvil, -W2 / 2 + 46, ay - 34, 68, 68); ctx.restore();
+  ctx.fillStyle = '#fff'; ctx.font = '700 34px Geist'; ctx.textBaseline = 'middle';
+  ctx.fillText('Кузнец', -W2 / 2 + 132, ay - 12);
+  ctx.fillStyle = '#8e8e93'; ctx.font = '500 26px Geist'; ctx.fillText('сейчас · сервер', -W2 / 2 + 132, ay + 22);
+  // bubble with the purchase-success message
+  ctx.font = '600 34px Geist';
+  const lines = wrapRuns(ctx, MESSAGE, W2 - 150);
+  const bx = -W2 / 2 + 46, by = ay + 66, bw = W2 - 92, bh = lines.length * 48 + 52;
+  rrPath(ctx, bx, by, bw, bh, 30); ctx.fillStyle = '#1c1c1e'; ctx.fill();
+  lines.forEach((ln, i) => ln.forEach(([c, word, x]) => { ctx.fillStyle = c; ctx.fillText(word, bx + 30 + x, by + 50 + i * 48); }));
+  // the item's tooltip with the new lore line (&a+ %upgrade%)
+  const ty = by + bh + 28, th = 132;
+  rrPath(ctx, bx, ty, bw, th, 18); ctx.fillStyle = '#100010'; ctx.fill();
+  ctx.lineWidth = 4; ctx.strokeStyle = '#2a0a5e'; rrPath(ctx, bx + 6, ty + 6, bw - 12, th - 12, 14); ctx.stroke();
+  ctx.font = '600 32px Geist'; ctx.fillStyle = MC.w; ctx.fillText('Железный меч', bx + 30, ty + 44);
+  ctx.fillStyle = MC.a; ctx.fillText(`+ ${BUY.name}`, bx + 30, ty + 92);
+  ctx.restore();
+}
+
+DESK.update = async (t) => {
+  const ctx = deskCanvas.getContext('2d');
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
+  if (t < B(49)) return {};                                   // the held beat of black
+  await footageAt(t - B(49) + 0.2);
+  const Q = QUAD, k = W / Q.size;
+  const Z = FOOTAGE.zoom + FOOTAGE.push * tw(t, B(49), B(53), (u) => u);
+  // draw the footage so the phone screen sits at the centre of the square
+  ctx.save();
+  ctx.translate(CX, CY); ctx.scale(k * Z, k * Z); ctx.translate(-Q.cx, -Q.cy);
+  ctx.drawImage(deskVideo, 0, 0, Q.size, Q.size);
+  ctx.restore();
+  // the black shape: full frame → the screen (beat 49) → full frame again (beat 52)
+  const sw = Q.w * k * Z, sh = Q.h * k * Z, sr = Q.r * k * Z;
+  const full = Math.hypot(W, H) + 40;
+  const inS = track(t, 0, [[B(49), 1, 0.5, 0.86]]);
+  const outS = tw(t, B(52), B(52) + 0.3, eio);
+  const u = clamp(inS) * (1 - outS);
+  const w = lerp(full, sw, u), h = lerp(full, sh, u), r = lerp(0, sr, u), ang = lerp(0, Q.angle, u);
+  ctx.save();
+  ctx.translate(CX, CY); ctx.rotate(ang);
+  rrPath(ctx, -w / 2, -h / 2, w, h, r); ctx.clip();
+  ctx.fillStyle = '#000'; ctx.fillRect(-w / 2, -h / 2, w, h);
+  // iris opens onto the message (beat 50) and closes again (beat 51)
+  const open = tw(t, B(50), B(50) + 0.3, eo) * (1 - tw(t, B(51), B(51) + 0.3, eio));
+  if (open > 0.001) drawMessage(ctx, sw, sh);
+  const R = Math.hypot(w, h) / 2 + 6;                         // blades always reach past the shape's corners
+  const rot = 0.95 * open + 0.9 * tw(t, B(51), B(51) + 0.3, eio);
+  if (open < 0.999) drawIris(ctx, 0, 0, R, open * R * 1.02, rot, ['#0f0f11', '#131316'], '#2a2a2f', 2);
+  ctx.restore();
+  return {};
+};
+</script>
+
+<script>
+'use strict';
+// ═════════════════════════════ RUNTIME ═════════════════════════════
+let READY = null;
+async function init() {
+  if (READY) return READY;
+  READY = (async () => {
+    await Promise.all([
+      document.fonts.load(`800 100px Archivo`), document.fonts.load(`600 100px Geist`), document.fonts.load(`800 100px Geist`),
+      document.fonts.load(`600 100px Geist`, 'Кузнец'), document.fonts.load(`800 100px Geist`, 'Вампиризм'),
+      document.fonts.load(`500 100px Geist Mono`),
+    ]);
+    await document.fonts.ready;
+    await Promise.all([...Object.keys(UPGRADES), 'anvil'].map((k) => loadImage(k, `assets/covers/${k}.jpg`)));
+    await loadImage('wall', `assets/covers/${COVER2}-wall.jpg`);
+    await Promise.all([...document.images].map((i) => (i.complete ? null : new Promise((r) => { i.onload = i.onerror = r; }))));
+    measureWordmark();
+    for (const a of ACTS) if (a.init) await a.init();
+  })();
+  return READY;
+}
+
+// The whole film is a pure function of t.
+async function seek(t) {
+  await init();
+  t = clamp(t, 0, DUR);
+  let cursor = null;
+  for (const a of ACTS) {
+    const active = t >= a.t0 && (t < a.t1 || (a.t1 >= DUR && t <= DUR)) || (a.also && a.also(t));
+    a.root.style.visibility = active ? 'visible' : 'hidden';
+    if (active) {
+      const r = (await a.update(t)) || {};
+      if (r.cursor) cursor = r.cursor;
+    }
+  }
+  drawCursor(cursor);
+  // let images/filters settle before a capture
+  await new Promise((r) => requestAnimationFrame(() => r()));
+  return t;
+}
+window.seek = seek;
+window.DUR = DUR;
+window.BEAT = BEAT;
+
+// Preview mode (open the file in a browser): fit to window, scrub and play.
+if (!navigator.webdriver) {
+  document.body.classList.add('preview');
+  const frame = document.getElementById('frame');
+  const fit = () => { const s = Math.min(innerWidth / W, (innerHeight - 48) / H); frame.style.transform = `scale(${s})`; frame.style.width = frame.style.height = `${1440 * s}px`; frame.style.transformOrigin = '0 0'; };
+  addEventListener('resize', fit); fit();
+  const scrub = document.getElementById('scrub'), tc = document.getElementById('tc'), playBtn = document.getElementById('play');
+  let playing = false, t0 = 0, start = 0, busy = false;
+  const go = async (t) => { if (busy) return; busy = true; await seek(t); tc.textContent = t.toFixed(3); scrub.value = t; busy = false; };
+  scrub.oninput = () => go(+scrub.value);
+  playBtn.onclick = () => { playing = !playing; playBtn.textContent = playing ? '❚❚' : '▶'; t0 = +scrub.value; start = performance.now(); if (playing) loop(); };
+  const loop = async () => { if (!playing) return; const t = (t0 + (performance.now() - start) / 1000) % DUR; await go(t); requestAnimationFrame(loop); };
+  const q = new URLSearchParams(location.search);
+  go(+(q.get('t') || 0));
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,275 @@
+{
+ "vampirism": {
+  "grid": [
+   ".............oro",
+   "............olro",
+   "...........olro.",
+   "..........olro..",
+   ".........olro...",
+   "........olro....",
+   ".......olro.....",
+   "...o..olro......",
+   "..ogoolro.......",
+   "...oGlro........",
+   "....ogo.........",
+   "...ohoGo........",
+   "..oho.ogo.......",
+   "ooho...o........",
+   "ppo.............",
+   "ppo............."
+  ],
+  "palette": {
+   "p": "#c8962e",
+   "g": "#c8962e",
+   "r": "#d0142e",
+   "h": "#5b3a24",
+   "l": "#e9eef2",
+   "G": "#f0c75a",
+   "o": "#221c18"
+  }
+ },
+ "flame": {
+  "grid": [
+   ".............ofo",
+   "............oyfo",
+   "...........oyfo.",
+   "..........oyfo..",
+   ".........oyfo...",
+   "........oyfo....",
+   ".......oyfo.....",
+   "...o..oyfo......",
+   "..ogooyfo.......",
+   "...oGyfo........",
+   "....ogo.........",
+   "...ohoGo........",
+   "..oho.ogo.......",
+   "ooho...o........",
+   "ppo.............",
+   "ppo............."
+  ],
+  "palette": {
+   "p": "#c8962e",
+   "g": "#c8962e",
+   "h": "#5b3a24",
+   "G": "#f0c75a",
+   "y": "#ffd54a",
+   "f": "#ff7a1a",
+   "o": "#221c18"
+  }
+ },
+ "poison": {
+  "grid": [
+   ".............ovo",
+   "............olvo",
+   "...........olvo.",
+   "..........olvo..",
+   "......o..olvo...",
+   ".....ogoolvo....",
+   "......oGlvo.....",
+   ".......ogo......",
+   "......ohoGo.....",
+   ".....oho.ogo....",
+   "...ooho...o.....",
+   "..oppo..........",
+   "..oppo..........",
+   "...oo...........",
+   "................",
+   "................"
+  ],
+  "palette": {
+   "p": "#c8962e",
+   "g": "#c8962e",
+   "v": "#7cff4f",
+   "h": "#5b3a24",
+   "l": "#e9eef2",
+   "G": "#f0c75a",
+   "o": "#221c18"
+  }
+ },
+ "nighteye": {
+  "grid": [
+   "................",
+   ".....oooooo.....",
+   "....oHHHHHHo....",
+   "...oHiiHHHHHo...",
+   "..oHiHHHHHHHHo..",
+   "..oHiHHHHHHHHo..",
+   ".oHHHHHHHHHHHHo.",
+   ".oHHddddddddHHo.",
+   ".oHHdwwEEwwdHHo.",
+   ".oHHddddddddHHo.",
+   ".oHHoHHHHHHoHHo.",
+   ".oHHooHHHHooHHo.",
+   ".oHHo.oooo.oHHo.",
+   "..oo........oo..",
+   "................",
+   "................"
+  ],
+  "palette": {
+   "w": "#9ff5ff",
+   "H": "#8d97a3",
+   "d": "#20242b",
+   "E": "#ffffff",
+   "i": "#d5dce4",
+   "o": "#221c18"
+  }
+ },
+ "shield": {
+  "grid": [
+   "..oooooooooooo..",
+   ".oAAAAAAAAAAAAo.",
+   ".oAaaaaaaaaaaAo.",
+   ".oAaBBBaaBBBaAo.",
+   ".oAaBaaaaaaBaAo.",
+   ".oAaaaaRRaaaaAo.",
+   ".oAaaaRaaRaaaAo.",
+   ".oAaaaRaaRaaaAo.",
+   ".oAaaaaRRaaaaAo.",
+   "..oAaBaaaaBaAo..",
+   "..oAaBBaaBBaAo..",
+   "...oAaaaaaaAo...",
+   "....oAaaaaAo....",
+   ".....oAaaAo.....",
+   "......oAAo......",
+   ".......oo......."
+  ],
+  "palette": {
+   "B": "#c9b8ff",
+   "A": "#3e2a8f",
+   "a": "#7a5cff",
+   "R": "#ffffff",
+   "o": "#221c18"
+  }
+ },
+ "laststand": {
+  "grid": [
+   ".oooo......oooo.",
+   "oCCCCo....oCCCCo",
+   "oCccCCooooCCccCo",
+   "oCcccCCCCCCcccCo",
+   "oCccccccccccccCo",
+   ".oCcccKKccKKcCo.",
+   ".oCccKKKKKKKKco.",
+   "..oCcKKKKKKKKCo.",
+   "..oCccKKKKKKcCo.",
+   "..oCcccKKKKccCo.",
+   "..oCccccKKcccCo.",
+   "..oCccccccccCo..",
+   "..oCCcccccccCo..",
+   "...oCCCCCCCCo...",
+   "....oooooooo....",
+   "................"
+  ],
+  "palette": {
+   "C": "#a8740f",
+   "c": "#ffcf3d",
+   "K": "#e2263f",
+   "o": "#221c18"
+  }
+ },
+ "wind": {
+  "grid": [
+   "...oooooooooo...",
+   "..oLLLLLLLLLLo..",
+   "..oLllllllllLo..",
+   "..oLlLLLLLLlLo..",
+   "wwwLllloolllLo..",
+   "..oLllloolllLo..",
+   "..oLllloolllLo..",
+   "..oLllloolllLo..",
+   "..oLLlloollLLwww",
+   "..oLllloolllLo..",
+   "..oLllloolllLo..",
+   "..oLllloolllLo..",
+   "wwoLLLLooLLLLo..",
+   "...oooo..oooo...",
+   "....wwww........",
+   "................"
+  ],
+  "palette": {
+   "w": "#9ff5ff",
+   "l": "#e6fbf8",
+   "L": "#0f6c66",
+   "o": "#221c18"
+  }
+ },
+ "feather": {
+  "grid": [
+   "............ooqo",
+   "...........oQqo.",
+   "..........oQqoo.",
+   ".........oQqooQo",
+   "........oQqooQo.",
+   "........oqooQo..",
+   ".......oqooQo...",
+   ".oooo.oqo..o....",
+   "oBBBBo.o........",
+   "oBbbbo..........",
+   "oBbbbo..........",
+   "oBbbboooo.......",
+   "oBbbbBBBBo......",
+   "oBbbbbbbbBo.....",
+   "oBBBBBBBBBo.....",
+   ".ooooooooo......"
+  ],
+  "palette": {
+   "B": "#1f5f99",
+   "b": "#7cc4ff",
+   "Q": "#cfe8ff",
+   "q": "#ffffff",
+   "o": "#221c18"
+  }
+ },
+ "rabbit": {
+  "grid": [
+   "................",
+   "................",
+   "................",
+   "................",
+   "....oooo........",
+   "...oBBBBo.......",
+   "...oBbbbo.......",
+   "...oBbbbo.......",
+   "...oBbbboooo....",
+   "...oBbbbBBBBo...",
+   "...oBbbbbbbbBo..",
+   "...oBBBBBBBBBo..",
+   "....ossssssso...",
+   ".....oSSSSSo....",
+   "....ossssssso...",
+   ".....ooooooo...."
+  ],
+  "palette": {
+   "s": "#d8dde3",
+   "b": "#ff8fc0",
+   "B": "#a3285e",
+   "S": "#8a939c",
+   "o": "#221c18"
+  }
+ },
+ "anvil": {
+  "grid": [
+   "................",
+   "................",
+   "oooooooooooooo..",
+   "NNNNNNNNNNNNNNoo",
+   "NnnnnnnnnnnnnNNN",
+   "oNNNNnnnnnnnnnNN",
+   ".oooNNnnnnnnNooo",
+   "....oNnnnnnNo...",
+   "....oNnnnnnNo...",
+   "...oNNnnnnnNNo..",
+   "..oNnnnnnnnnnNo.",
+   ".oNnnnnnnnnnnnNo",
+   ".oNNNNNNNNNNNNNo",
+   "..ooooooooooooo.",
+   "................",
+   "................"
+  ],
+  "palette": {
+   "n": "#6b7380",
+   "N": "#2b2f36",
+   "o": "#221c18"
+  }
+ }
+}

@@ -1,0 +1,128 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<script type="importmap">{ "imports": {
+  "three": "./node_modules/three/build/three.module.js",
+  "three/addons/": "./node_modules/three/examples/jsm/" } }</script>
+<style>html,body{margin:0;background:#000}</style>
+</head><body>
+<script type="module">
+import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+
+// Deterministic PRNG so every cover renders the same way twice.
+function rng(seed) { let s = seed >>> 0; return () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296); }
+
+const METAL = new Set(['l', 'm', 'g', 'G', 'p', 'H', 'i', 'C', 'c', 'N', 'n', 's', 'S']);
+const GLOW = new Set(['w', 'E', 'y', 'f', 'v', 'R']);
+
+window.renderCover = async function (cfg, sprite, size) {
+  // portrait: same camera and horizontal field of view, taller frame. The centre square of a
+  // portrait render is the square cover, so the two can hand over without a seam.
+  const W = size, H = Math.round(size * (cfg.portrait || 1));
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
+  renderer.setPixelRatio(1);
+  renderer.setSize(W, H);
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.05;
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.setClearColor(0x000000, 0);
+
+  const scene = new THREE.Scene();
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+  scene.environmentIntensity = 0.55;
+
+  const vfov = (2 * Math.atan(Math.tan((13 * Math.PI) / 180) * (H / W)) * 180) / Math.PI;
+  const camera = new THREE.PerspectiveCamera(vfov, W / H, 1, 400);
+  camera.position.set(0, 0, 62);
+
+  const key = new THREE.DirectionalLight(0xffffff, 2.6);
+  key.position.set(-22, 30, 40);
+  key.castShadow = true;
+  key.shadow.mapSize.set(4096, 4096);
+  key.shadow.radius = 9;
+  key.shadow.blurSamples = 24;
+  const sh = 30 * (H / W);
+  Object.assign(key.shadow.camera, { left: -sh, right: sh, top: sh, bottom: -sh, near: 1, far: 140 });
+  key.shadow.bias = -0.0004;
+  scene.add(key);
+  scene.add(new THREE.HemisphereLight(0xffffff, new THREE.Color(cfg.bg[1]), 0.9));
+  const rim = new THREE.DirectionalLight(new THREE.Color(cfg.rim || '#ffffff'), 1.4);
+  rim.position.set(30, -10, -20);
+  scene.add(rim);
+
+  // Backdrop that only receives the drop shadow.
+  const wall = new THREE.Mesh(new THREE.PlaneGeometry(400, 400), new THREE.ShadowMaterial({ opacity: cfg.shadow ?? 0.28 }));
+  wall.position.z = -9;
+  wall.receiveShadow = true;
+  scene.add(wall);
+
+  const grid = sprite.grid, pal = sprite.palette, N = grid.length;
+  const obj = new THREE.Group();
+  const depth = cfg.depth ?? 1.25;
+  const geo = new RoundedBoxGeometry(1, 1, depth, 3, 0.11);
+  const byKey = {};
+  grid.forEach((row, y) => [...row].forEach((c, x) => { if (c !== '.') (byKey[c] ||= []).push([x, y]); }));
+  for (const [c, cells] of Object.entries(byKey)) {
+    const col = new THREE.Color(pal[c]);
+    const mat = new THREE.MeshStandardMaterial({
+      color: col,
+      roughness: c === 'o' ? 0.75 : METAL.has(c) ? 0.32 : 0.5,
+      metalness: METAL.has(c) ? 0.55 : 0.0,
+      emissive: GLOW.has(c) ? col : new THREE.Color(0),
+      emissiveIntensity: GLOW.has(c) ? (cfg.glow ?? 0.35) : 0,
+    });
+    const mesh = new THREE.InstancedMesh(geo, mat, cells.length);
+    const m = new THREE.Matrix4();
+    cells.forEach(([x, y], i) => { m.makeTranslation(x - (N - 1) / 2, (N - 1) / 2 - y, 0); mesh.setMatrixAt(i, m); });
+    mesh.castShadow = true; mesh.receiveShadow = true;
+    obj.add(mesh);
+  }
+  obj.rotation.set(cfg.rot[0], cfg.rot[1], cfg.rot[2]);
+  obj.scale.setScalar(cfg.scale ?? 1.35);
+  obj.position.set(...(cfg.pos || [0, 0.6, 0]));
+  scene.add(obj);
+
+  // Effect particles: small rounded cubes scattered in depth.
+  const r = rng(cfg.seed || 7);
+  const pgeo = new RoundedBoxGeometry(1, 1, 1, 3, 0.18);
+  for (const p of cfg.particles || []) {
+    for (let i = 0; i < p.n; i++) {
+      const col = new THREE.Color(p.colors[Math.floor(r() * p.colors.length)]);
+      const mat = new THREE.MeshStandardMaterial({ color: col, roughness: 0.45, emissive: col, emissiveIntensity: p.glow ?? 0.15 });
+      const m = new THREE.Mesh(pgeo, mat);
+      const [x0, x1] = p.x, [y0, y1] = p.y, [z0, z1] = p.z;
+      m.position.set(x0 + (x1 - x0) * r(), y0 + (y1 - y0) * r(), z0 + (z1 - z0) * r());
+      const s = p.s[0] + (p.s[1] - p.s[0]) * r();
+      m.scale.set(s * (p.sx || 1), s * (p.sy || 1), s);
+      if (p.spin !== false) m.rotation.set(r() * 0.8 - 0.4, r() * 0.8 - 0.4, (p.rz ?? 0) + r() * 0.6 - 0.3);
+      m.castShadow = true;
+      scene.add(m);
+    }
+  }
+
+  renderer.render(scene, camera);
+
+  // Compose: painted backdrop, then the render on top, then fine grain.
+  const out = document.createElement('canvas');
+  out.width = W; out.height = H;
+  const g = out.getContext('2d');
+  const oy = (H - W) / 2;   // the square's offset inside a portrait frame
+  const lin = g.createLinearGradient(0, oy, W * 0.35, oy + W);
+  lin.addColorStop(0, cfg.bg[0]); lin.addColorStop(1, cfg.bg[1]);
+  g.fillStyle = lin; g.fillRect(0, 0, W, H);
+  const rad = g.createRadialGradient(W * 0.42, oy + W * 0.36, 0, W * 0.42, oy + W * 0.36, W * 0.62);
+  rad.addColorStop(0, cfg.light || 'rgba(255,255,255,0.32)'); rad.addColorStop(1, 'rgba(255,255,255,0)');
+  g.fillStyle = rad; g.fillRect(0, 0, W, H);
+  g.drawImage(renderer.domElement, 0, 0);
+  const img = g.getImageData(0, 0, W, H), d = img.data, gr = rng(99);
+  for (let i = 0; i < d.length; i += 4) { const n = (gr() - 0.5) * 9; d[i] += n; d[i + 1] += n; d[i + 2] += n; }
+  g.putImageData(img, 0, 0);
+  renderer.dispose();
+  return out.toDataURL('image/jpeg', 0.93);
+};
+window.ready = true;
+</script></body></html>
